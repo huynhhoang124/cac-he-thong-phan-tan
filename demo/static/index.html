@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TrustMesh</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header>
+    <div>
+      <p class="eyebrow">DISTRIBUTED SYSTEMS · CHƯƠNG 9</p>
+      <h1>TrustMesh</h1>
+      <p class="subtitle">Trust, authorization và collaborative intrusion detection trên ba node độc lập</p>
+    </div>
+    <div id="health" class="status">Đang kết nối…</div>
+  </header>
+
+  <main>
+    <section class="architecture">
+      <h2>Trạng thái cluster</h2>
+      <div id="nodes" class="nodes"></div>
+    </section>
+
+    <section>
+      <h2>Kịch bản trình diễn</h2>
+      <div class="actions">
+        <button data-scenario="authorization">ABAC + delegation</button>
+        <button data-scenario="sybil">Sybil attack</button>
+        <button data-scenario="cids">Collaborative IDS</button>
+        <button data-scenario="tamper">Tamper audit log</button>
+        <button data-scenario="refresh" class="secondary">Làm mới trạng thái</button>
+      </div>
+    </section>
+
+    <section class="results-grid">
+      <div>
+        <h2>Kết quả gần nhất</h2>
+        <pre id="result">Chọn một scenario để bắt đầu.</pre>
+      </div>
+      <div>
+        <h2>Giám sát cộng tác</h2>
+        <div id="metrics" class="metrics"></div>
+        <div id="incidents"></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Audit chain</h2>
+      <p id="audit-summary"></p>
+      <div id="audit" class="audit"></div>
+    </section>
+  </main>
+
+  <footer>Demo học thuật. Danh tính người dùng và lưu lượng tấn công đều là dữ liệu mô phỏng.</footer>
+  <script src="/static/app.js" defer></script>
+</body>
+</html>

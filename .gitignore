@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.build/
+.codex-finalizer/
+.playwright-cli/
+.venv/
+.env
+output/playwright/
+.playwright-mcp/
+tmp/
+*.stderr.log
