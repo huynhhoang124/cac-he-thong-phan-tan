@@ -50,11 +50,18 @@ Một sensor không quan sát được toàn bộ hệ thống. CIDS chia sensor
 
 ## Slide 13 — Kiến trúc TrustMesh
 
-Ba node tự thực thi policy, audit và detection. Alert được ký. Hai reporter độc lập tạo quorum. Tắt một node chỉ tạo partial failure; hai node còn lại tiếp tục phục vụ.
+Ba node tự thực thi policy, audit và detection; mỗi node có khóa Ed25519 và ghim khóa của peer. Alert và vé đều được ký, node khác tự kiểm mà không gọi lại node ký. Hai reporter độc lập tạo quorum. Tắt một node chỉ tạo partial failure; hai node còn lại tiếp tục phục vụ.
 
 ## Slide 14 — Kịch bản demo
 
-Chạy lần lượt authorization, Sybil, CIDS, tamper evidence và partial failure. Mỗi bước phải nói rõ cơ chế nào trong sách đang được thể hiện.
+Một câu chuyện "Mallory muốn sửa bảng điểm", 4 màn. Bấm R rồi bấm → (hoặc phím 1–4):
+
+1. **Ai được đọc bảng điểm?** (9.5.1–9.5.2): Alice đọc được (ABAC), Mallory bị chặn (MAC), tự khai `admin` bị bỏ qua. 3 lần bị từ chối làm sensor node-a phát cảnh báo AIDS, nhưng 1 node chưa thành incident.
+2. **Ủy quyền đi qua ba node** (9.5.3): node-a ký vé cho Bob, Bob ủy Carol ở node-b, Carol đọc ở node-c. Không node nào hỏi lại node cấp vé; mở rộng quyền bị chặn.
+3. **Mallory đổi chiến thuật** (9.4, 9.6.2–9.6.3): vé đánh cắp, vé giả chữ ký, vé tự ký đều bị từ chối (trust anchor). AIDS ở node-c, SIDS path traversal ở node-b; đủ quorum, incident được cả 3 node xác nhận.
+4. **Xóa dấu vết** (9.4.3): Mallory sửa audit log của node-a, chuỗi hash đứt; node-b, node-c vẫn giữ bằng chứng.
+
+Các màn nối nhau: vé ở màn 2 bị đánh cắp ở màn 3, lần bị từ chối ở màn 1 là bản ghi bị sửa ở màn 4. Kết thúc bằng partial failure: tắt node B, bấm R, chạy lại 1 → 4. Sybil, Byzantine n ≥ 3k + 1 và firewall chỉ nói trên slide. Lời dẫn ở `DEMO_SCRIPT.md`.
 
 ## Slide 15 — Kết luận
 

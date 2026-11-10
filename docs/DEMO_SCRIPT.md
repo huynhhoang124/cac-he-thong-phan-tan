@@ -1,65 +1,81 @@
-# Kịch bản demo 7 phút
+# Kịch bản demo TrustMesh: "Mallory muốn sửa bảng điểm" (~5 phút)
 
-## 0:00-0:40 — Kiến trúc
+Một câu chuyện, 4 màn. Mỗi màn thể hiện vài ý của sách, và các màn nối vào nhau: vé ở màn 2 bị Mallory đánh cắp ở màn 3, lần bị từ chối ở màn 1 là bản ghi Mallory muốn xóa ở màn 4.
 
-Mở dashboard tại `http://localhost:8001`. Chỉ vào ba node và nhấn mạnh mỗi node là một container, có khóa ký, policy engine, sensor và audit chain riêng. Các node chỉ trao đổi HTTP.
+Trước khi bắt đầu: `docker compose up -d` (hoặc `.\run-local.ps1`), mở `http://localhost:8001`, bấm **R** để reset. Bấm **→** để sang màn tiếp theo.
 
-## 0:40-2:10 — Authorization và delegation
+| Màn | Thời gian | Người | Ý thể hiện | Mục sách |
+|---|---|---|---|---|
+| 0 | 0:30 | Hùng | Kiến trúc 3 node | — |
+| 1 | 1:00 | Huynh | ABAC, MAC, fail-safe, AuthN ≠ AuthZ, quyết định là dữ liệu cho sensor | 9.5.1–9.5.2 |
+| 2 | 1:00 | Huynh | Capability ký số, tự kiểm tại chỗ, delegation chỉ thu hẹp, WAVE | 9.5.1, 9.5.3–9.5.4 |
+| 3 | 1:00 | Huynh → Hùng | Trust anchor, SIDS/AIDS, cảnh báo ký số, quorum | 9.4, 9.6.2–9.6.3 |
+| 4 | 0:45 | Hùng | Hash chain, bằng chứng nằm trên nhiều node | 9.4.3 |
+| 5 | 0:45 | Hùng | Partial failure | — |
 
-Chạy **ABAC + delegation**.
+Sybil (9.4.2), Byzantine n ≥ 3k + 1 (9.4.1) và Firewall (9.6.1) chỉ nói trên slide.
 
-- Alice là teacher của đúng course và có clearance phù hợp nên được đọc bảng điểm.
-- Mallory là guest, khác department và thiếu clearance nên bị từ chối.
-- Alice cấp capability `read` cho Bob trong năm phút.
-- Bob đọc được nhưng không ghi được. Capability áp dụng nguyên tắc attenuation: quyền con không thể mạnh hơn quyền cha.
+## 0 — Kiến trúc
 
-Liên hệ sách: reference monitor, ABAC, capabilities và delegation ở 9.5.
+Chỉ vào 3 node. Mỗi node có khóa riêng (`key`), audit chain riêng (`chain`) và danh sách incident riêng. Trình duyệt chỉ nói chuyện với node-a; node-a điều phối các node khác qua HTTP.
 
-## 2:10-3:15 — Sybil attack
+## Màn 1 — Ai được đọc bảng điểm? (9.5.1–9.5.2)
 
-Chạy **Sybil attack**.
+Mọi request đều đi vào node-a.
 
-- Admission ngây thơ chấp nhận toàn bộ identity giả.
-- Admission resistant yêu cầu fingerprint vật lý duy nhất và stake tối thiểu.
-- Giải thích đây là mô hình minh họa ý tưởng PoW/PoS: tạo identity phải gắn với chi phí. Nó không phải giải pháp Sybil hoàn chỉnh.
+- Alice là giảng viên môn DS, đang ở campus, nên được đọc (ABAC).
+- Mallory là guest, bị từ chối vì nhãn public < confidential (MAC).
+- Mallory tự khai `role=admin`. Node bỏ qua thuộc tính tự khai và tra directory, nên vẫn từ chối. Đây là điểm AuthN ≠ AuthZ.
+- Mallory thử sửa điểm và tiếp tục bị từ chối.
+- **Dòng cảnh báo vàng:** sensor của node-a thấy 3 lần từ chối trong 30 giây, nên ký và gửi cảnh báo AIDS cho B và C. B và C mới thấy 1 reporter, nên chưa thành incident.
 
-Liên hệ sách: 9.4.2.
+Câu chốt: quyết định truy cập cũng là dữ liệu cho monitoring. Nhưng một node nghi ngờ thì chưa đủ.
 
-## 3:15-4:50 — Collaborative IDS
+## Màn 2 — Ủy quyền đi qua ba node (9.5.1, 9.5.3)
 
-Chạy **Collaborative IDS**.
+- node-a ký vé: Alice cho Bob quyền [read, write] và cho phép ủy tiếp.
+- Bob mang vé sang node-b và ủy cho Carol quyền [read]. **node-b tự kiểm vé của node-a, không hỏi lại.** Vé con có depth 1, có `parent` và hạn ngắn hơn.
+- Bob thử ủy [read, delete]: bị chặn vì không được mở rộng quyền.
+- Carol đọc ở node-c thì được, ghi thì không.
+- Chỉ vào chuỗi vé ở bên phải. Các vé nối nhau bằng parent-hash, giống một đường đi chứng minh quyền trong WAVE.
 
-- Chuỗi truy cập bị từ chối và nhiều tên `sybil-*` tạo cảnh báo tại từng sensor.
-- Một cảnh báo riêng lẻ chưa đủ kết luận.
-- Khi ít nhất hai reporter độc lập cùng báo một fingerprint, hệ thống tạo incident.
-- Chỉ vào Accuracy, Precision, TP và FP. Nhắc đến đánh đổi false negative và false positive trong 9.6.
+## Màn 3 — Mallory đổi chiến thuật (9.4 + 9.6.2–9.6.3)
 
-## 4:50-5:45 — Tamper evidence
+Mallory chuyển sang node-c.
 
-Chạy **Tamper audit log**.
+- Dùng lại vé đánh cắp của Carol: bị từ chối vì vé cấp cho carol.
+- Sửa vé thành của mình và giả chữ ký node-b: bị từ chối vì chữ ký không khớp khóa đã ghim của node-b.
+- Tự phát vé bằng khóa riêng: bị từ chối vì khóa không thuộc cluster. Đây là **trust anchor**, nối với 9.4.
+- Sensor của node-c bắn AIDS. Lúc này node-a thấy 2 reporter, nên thành **INCIDENT**.
+- Ở node-b, Mallory dò `../../etc/passwd`. Sensor bắn **SIDS** (khớp mẫu đã biết), khác với AIDS (bất thường so với ngưỡng).
+- Kết quả: incident được cả 3 node xác nhận.
 
-- Mỗi record chứa hash của record trước.
-- Sửa record đầu làm toàn bộ phần nối sau mất tính nhất quán.
-- Đây là bằng chứng chỉnh sửa, không tự động đồng nghĩa toàn bộ hệ thống đáng tin.
+Câu chốt: chữ ký chỉ có giá trị khi khóa thuộc cluster. Từng node chỉ thấy một phần; khi nhiều node độc lập cùng báo, cảnh báo mới thành incident. Cảnh báo được ghép theo thời điểm node nhận, không cần đồng hồ chung.
 
-Liên hệ sách: 9.4.3 và append-only storage trong ví dụ WAVE.
+## Màn 4 — Xóa dấu vết (9.4.3)
 
-## 5:45-6:40 — Partial failure
+- Mallory chiếm node-a và sửa bản ghi "mallory bị từ chối" thành được phép.
+- node-a kiểm chuỗi: đứt đúng tại bản ghi đó. Bên phải, khối bị sửa có màu đỏ.
+- node-b và node-c vẫn giữ chuỗi hợp lệ và incident về Mallory.
 
-Trong terminal:
+Câu chốt: hash chain không ngăn được việc sửa, nó làm việc sửa bị lộ. Bằng chứng nằm trên nhiều node, nên chiếm một node không xóa được hết.
+
+## 5 — Partial failure
 
 ```bash
 docker compose stop node-b
 ```
 
-Nhấn **Làm mới trạng thái**. Node B chuyển sang `unreachable`, nhưng Node A và C vẫn hoạt động. Chạy lại authorization để chứng minh dịch vụ còn phục vụ.
+Bấm **R**, rồi chạy lại 1 → 4:
 
-Khôi phục:
+- Màn 2: node-b không phản hồi, nên Bob ủy quyền qua node-c.
+- Màn 3: incident vẫn đạt quorum nhờ node-a và node-c.
+- Màn 4: node-c vẫn giữ bằng chứng.
 
 ```bash
 docker compose start node-b
 ```
 
-## 6:40-7:00 — Kết luận
+## Kết luận
 
-TrustMesh không yêu cầu tin một cảnh báo đơn lẻ, mặc định từ chối khi policy không cho phép, hạn chế quyền được ủy quyền và giữ bằng chứng kiểm toán. Đây là cách các cơ chế 9.4-9.6 phối hợp thay vì hoạt động độc lập.
+Không cơ chế nào đứng một mình. Trust cho biết tin khóa nào. Authorization dùng khóa đó để kiểm vé tại chỗ. Monitoring ghép góc nhìn của nhiều node. Audit chain giữ lại bằng chứng.

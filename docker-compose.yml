@@ -1,36 +1,36 @@
+x-node: &node
+  build: .
+  environment: &env
+    DATA_DIR: /data
+    ALLOWED_HOSTS: localhost,127.0.0.1,node-a,node-b,node-c
+
 services:
   node-a:
-    build: .
+    <<: *node
     environment:
+      <<: *env
       NODE_ID: node-a
       PEERS: http://node-b:8000,http://node-c:8000
-      ALLOWED_HOSTS: localhost,127.0.0.1,node-a,node-b,node-c
-    ports:
-      - "8001:8000"
-    volumes:
-      - node-a-data:/data
+    ports: ["8001:8000"]
+    volumes: [node-a-data:/data]
 
   node-b:
-    build: .
+    <<: *node
     environment:
+      <<: *env
       NODE_ID: node-b
       PEERS: http://node-a:8000,http://node-c:8000
-      ALLOWED_HOSTS: localhost,127.0.0.1,node-a,node-b,node-c
-    ports:
-      - "8002:8000"
-    volumes:
-      - node-b-data:/data
+    ports: ["8002:8000"]
+    volumes: [node-b-data:/data]
 
   node-c:
-    build: .
+    <<: *node
     environment:
+      <<: *env
       NODE_ID: node-c
       PEERS: http://node-a:8000,http://node-b:8000
-      ALLOWED_HOSTS: localhost,127.0.0.1,node-a,node-b,node-c
-    ports:
-      - "8003:8000"
-    volumes:
-      - node-c-data:/data
+    ports: ["8003:8000"]
+    volumes: [node-c-data:/data]
 
 volumes:
   node-a-data:

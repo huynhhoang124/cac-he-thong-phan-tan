@@ -31,7 +31,7 @@ Tài liệu này dành cho người trình bày: giải thích từng khái ni�
 - Các bảo vệ phải dùng **cùng một danh sách** (policy). Nếu policy cập nhật ở node A mà node C chưa nhận, C trở thành lỗ hổng → bài toán **nhất quán của policy giữa các bản sao**.
 - Fail-safe càng quan trọng: khi node không lấy được thông tin (mạng lỗi, timeout), phải **từ chối** chứ không được "cho qua vì không kiểm được".
 
-**TrustMesh:** mỗi node tự chạy `PolicyEngine` riêng — ba reference monitor độc lập. Policy nằm trong code, cả ba container dùng chung image nên nhất quán *theo triển khai*; muốn đổi policy phải triển khai lại cả ba (không có cơ chế đồng bộ lúc chạy). Dòng cuối `evaluate()` là fail-safe default.
+**TrustMesh:** mỗi node tự chạy `evaluate()` trong `demo/authz.py` — ba reference monitor độc lập. Policy nằm trong code, cả ba container dùng chung image nên nhất quán *theo triển khai*; muốn đổi policy phải triển khai lại cả ba (không có cơ chế đồng bộ lúc chạy). Dòng cuối `evaluate()` là fail-safe default: `Decision(False, "fail-safe", "không luật nào cho phép → mặc định từ chối")`; subject hoặc resource không có trong directory cũng bị từ chối.
 
 **Lên slide (thêm):** hình 3 cánh cửa A/B/C, mỗi cửa một bảo vệ, cùng cầm một bản policy. **Chỉ nói:** chuyện policy lệch phiên bản.
 
@@ -43,7 +43,7 @@ Tài liệu này dành cho người trình bày: giải thích từng khái ni�
 
 **Vì sao khó hơn khi phân tán (ⓑ ⓔ):** Node nhận request chỉ thấy một message. Thuộc tính "Alice là teacher" do **ai** khẳng định? Trong hệ phân tán, thuộc tính phải đến từ một nguồn đáng tin (attribute authority, certificate, token có chữ ký) — đây là chỗ phần 9.5 nối với 9.4 Trust của Hùng.
 
-**TrustMesh (nói thật, giảng viên dễ hỏi):** trong demo, client **tự gửi** `role`, `clearance`, `department` trong request. Nghĩa là Mallory có thể tự khai `role: admin` và được RBAC cho qua. Đây là giới hạn có chủ ý của demo (PLAN §10: danh tính là dữ liệu mô phỏng). Hệ thật sẽ lấy thuộc tính từ token đã ký (ví dụ OAuth/OpenID) thay vì tin client.
+**TrustMesh:** node tra thuộc tính trong **attribute directory phía server** (`SUBJECTS` trong `demo/authz.py`). Client có gửi `claims` thì cũng bị bỏ qua. Màn **1** của demo: Mallory tự khai `role=admin` vẫn bị từ chối, lý do ghi "thuộc tính tự khai bị bỏ qua, tra directory". **Nói thật nếu bị hỏi:** directory nằm cứng trong code, giống nhau trên mọi node vì cùng image; hệ thật lấy thuộc tính từ token đã ký (ví dụ OAuth/OpenID).
 
 **Lên slide:** hai ô "AuthN: bạn là ai?" → "AuthZ: được làm gì?", mũi tên ghi "thuộc tính phải có người bảo lãnh (9.4)".
 
@@ -64,13 +64,26 @@ Tài liệu này dành cho người trình bày: giải thích từng khái ni�
 - RBAC cần **mọi node hiểu vai trò giống nhau** — "teacher" ở trường A có giống "teacher" ở trường B?
 - ABAC cần thuộc tính đến từ **nhiều nguồn ở nhiều máy** (phòng đào tạo giữ danh sách môn, gateway biết vùng mạng). Mỗi lần quyết định có thể phải hỏi qua mạng → chậm, và nguồn thuộc tính có thể đang lỗi (ⓒ).
 
-**TrustMesh:** `PolicyEngine` xét theo thứ tự admin → RBAC, owner → DAC, còn lại → ABAC (có thuộc tính môi trường `network_zone`: tài nguyên restricted yêu cầu campus hoặc VPN).
+**TrustMesh:** `evaluate()` xét theo thứ tự admin → **RBAC**, owner → **DAC**, clearance thấp hơn classification → **MAC** từ chối, còn lại → **ABAC** (tài nguyên public cho đọc; tài nguyên restricted chỉ từ campus/VPN, thuộc tính môi trường `zone`; teacher đúng khoa, đúng môn được đọc/ghi), không khớp → **fail-safe**.
+
+Màn **1 (Ai được đọc bảng điểm?)**: mọi request đi vào node-a, mỗi dòng có nhãn mô hình:
+
+| Request | Kết quả | Mô hình |
+|---|---|---|
+| Alice (GV môn DS) đọc ở campus | ✓ | ABAC |
+| Mallory (guest) đọc | ✕ | MAC: nhãn public < confidential |
+| Mallory tự khai `role=admin` | ✕ | thuộc tính tự khai bị bỏ qua, tra directory → MAC |
+| Mallory thử sửa điểm | ✕ | MAC |
+
+Nhấn mạnh dòng 3: authorization chỉ đúng khi đầu vào đã được xác thực (AuthN ≠ AuthZ). Sau lần từ chối thứ 3, **dòng cảnh báo vàng**: sensor node-a ký và gửi cảnh báo AIDS cho B và C; B và C mới thấy 1 reporter nên chưa thành incident. Câu chốt: quyết định truy cập cũng là dữ liệu cho monitoring, nhưng một node nghi ngờ thì chưa đủ.
+
+RBAC, DAC và ABAC môi trường không có trong demo, chỉ nói trên slide. Fail-safe xuất hiện ở màn 3: `../../etc/passwd` không có trong directory nên bị từ chối mặc định.
 
 ---
 
 ## Slide 9 — ABAC trong thực tế
 
-Giữ nguyên. **Thêm lời nói:** "Quyết định này được tính **tại chỗ, trên node nhận request**, không cần hỏi node khác — nên node B chết thì node A vẫn quyết định được." (nối sang ⓒ và đoạn demo tắt node B).
+Lý do trên slide lấy nguyên văn từ code: Alice → "teacher cs, dạy ds, zone campus" (ABAC); Mallory → "nhãn public < confidential" (luật MAC chặn trước khi tới ABAC). **Thêm lời nói:** "Quyết định này được tính **tại chỗ, trên node nhận request**, không cần hỏi node khác — nên node B chết thì node A vẫn quyết định được." (nối sang ⓒ và đoạn demo tắt node B).
 
 ---
 
@@ -93,11 +106,16 @@ Giữ nguyên. **Thêm lời nói:** "Quyết định này được tính **tạ
 | Thu hồi quyền | Dễ: xóa khỏi danh sách | **Khó**: vé đã phát ra, phải báo cho mọi node, hoặc để vé hết hạn nhanh |
 | Hạn dùng | Không cần | Phụ thuộc **đồng hồ của node kiểm tra** (ⓓ) |
 
-**Kết luận để nói:** capability hợp với hệ phân tán vì **không cần hỏi trung tâm**, đổi lại phải trả giá ở **thu hồi** và **đồng bộ đồng hồ**. Cách phổ biến: cho vé sống ngắn (TrustMesh: Bob nhận vé 5 phút).
+**Kết luận để nói:** capability hợp với hệ phân tán vì **không cần hỏi trung tâm**, đổi lại phải trả giá ở **thu hồi** và **đồng bộ đồng hồ**. Cách phổ biến: cho vé sống ngắn (TrustMesh: vé của Bob 10 phút, vé ủy cho Carol 5 phút).
 
-**TrustMesh:** capability là JSON ký Ed25519 gồm `subject`, `resource`, `actions`, `expires_at`. Node nào cũng kiểm được mà không gọi node cấp.
+**TrustMesh:** capability là JSON ký Ed25519, payload gồm `issuer`, `subject`, `resource`, `actions`, `expires`, `may_delegate`, `depth`, `parent` và `node` (node đã ký). Node nhận vé tra khóa của `node` trong **keyring** (trust anchor: khóa peer học qua `/identity` lần đầu rồi ghim lại), không lấy khóa từ vé, và không gọi lại node cấp.
 
-**Nên biết trước khi bị hỏi:** hiện `verify()` lấy khóa công khai **nằm ngay trong capability** để kiểm chữ ký, chưa so với danh sách khóa của các node đã biết. Tức là ai tự sinh khóa, tự ký một capability `write` cũng sẽ qua. Hệ đúng phải có **trust anchor**: chỉ chấp nhận chữ ký của khóa thuộc node trong cụm (cách mà `/alerts/receive` đã làm bằng `/identity`). Sửa được bằng vài dòng nếu muốn.
+Màn **2** dùng vé xuyên node (chi tiết ở slide 11): node-a ký vé, node-b và node-c tự kiểm, **không gọi lại node-a**. Dòng chi tiết ghi người cấp, người nhận, quyền, depth, node ký và chữ ký.
+
+Màn **3 (Mallory đổi chiến thuật)**, Mallory chuyển sang node-c:
+- Dùng lại vé đánh cắp của Carol → "vé cấp cho carol, không phải mallory".
+- Sửa vé thành của mình rồi giả chữ ký node-b → "chữ ký không khớp khóa của node-b".
+- Tự phát vé bằng khóa riêng → "khóa ký 'mallory-laptop' không thuộc cluster". Đây là **trust anchor**, nối lại 9.4 Trust.
 
 ---
 
@@ -123,7 +141,9 @@ Luồng: client chuyển Alice sang authorization server → Alice đăng nhập
 
 **WAVE** — ủy quyền **không cần máy chủ trung tâm**: mỗi lần cấp quyền là một *attestation* đã ký, lưu ở kho chung chỉ ghi thêm. Muốn chứng minh có quyền thì đưa ra **một đường đi** trong đồ thị attestation từ chủ tài nguyên đến mình; quyền thu hẹp dần dọc đường. Người cấp quyền **không cần online** lúc người nhận dùng quyền (ⓒ).
 
-**TrustMesh:** `delegate()` áp 3 luật: actions ⊆ actions cha, `expires_at = min(ttl mới, hạn cha)`, `parent_hash` nối về vé cha. Node kiểm vé cha **tại thời điểm ủy quyền**, rồi ký vé con.
+**TrustMesh:** `delegate()` kiểm vé cha (chữ ký, hạn, đúng người cầm) **tại thời điểm ủy quyền**, rồi áp các luật: vé cha phải có `may_delegate = true`, actions ⊆ actions cha, `expires = min(now + ttl, hạn cha)`, `depth` tăng 1, `parent` = hash của vé cha. Sau đó node ký vé con.
+
+Màn **2 (Ủy quyền đi qua ba node)**: node-a ký vé Alice cấp Bob [read, write], cho phép ủy tiếp. Bob mang vé sang node-b và ủy Carol [read]: **node-b tự kiểm vé của node-a, không hỏi lại**; vé con có depth 1, có `parent`, hạn ngắn hơn. Bob thử ủy [read, delete]: bị chặn vì mở rộng quyền. Carol đọc ở node-c được, ghi thì không. Bên phải dashboard là chuỗi vé nối nhau bằng `parent`, giống một đường đi attestation của WAVE. Vé của Carol sẽ bị Mallory đánh cắp ở màn 3.
 
 ---
 
@@ -140,9 +160,11 @@ Luồng: client chuyển Alice sang authorization server → Alice đăng nhập
 - Hệ phân tán **không có một biên rõ ràng**: node nằm ở nhiều mạng, nhiều cloud; người dùng hợp lệ ở khắp nơi. Không có "bên trong an toàn".
 - Kẻ tấn công dùng **tài khoản hợp lệ bị đánh cắp** thì lưu lượng trông bình thường → vẫn cần authorization ở từng node và IDS bên trong.
 
-**TrustMesh:** middleware application gateway ở **mỗi node**: payload > 64 KB → 413, > 80 request/10 giây/nguồn → 429, cộng các header bảo mật.
+**TrustMesh:** middleware application gateway ở **mỗi node**: payload > 64 KB → 413, > 60 request/10 giây/nguồn → 429, cộng TrustedHost và các header bảo mật (CSP, nosniff, X-Frame-Options).
 
-**Nên biết trước khi bị hỏi:** bộ đếm rate limit nằm **riêng từng node**. Kẻ tấn công rải request lên cả 3 node được 3 × 80 = 240 request/10 giây. Đây đúng là bài toán **rate limiting phân tán** — muốn chặn chung thì các node phải chia sẻ bộ đếm, tức lại cần trao đổi message.
+Firewall **không có trong demo**, chỉ nói trên slide.
+
+**Nên biết trước khi bị hỏi:** bộ đếm rate limit nằm **riêng từng node**. Kẻ tấn công rải request lên cả 3 node được 3 × 60 = 180 request/10 giây. Đây đúng là bài toán **rate limiting phân tán** — muốn chặn chung thì các node phải chia sẻ bộ đếm, tức lại cần trao đổi message.
 
 ---
 
@@ -160,7 +182,7 @@ Luồng: client chuyển Alice sang authorization server → Alice đăng nhập
 - "Bình thường" của hệ phân tán **khác nhau ở từng node** (node A nhận nhiều đọc, node B nhiều ghi) → mô hình hành vi phải theo từng node.
 - Luật "3 lần trong 30 giây" đếm theo **đồng hồ của từng node**; một tấn công rải đều trên 3 node có thể không node nào thấy đủ ngưỡng — **mỗi node chỉ thấy một mảnh**. Đây là lý do dẫn sang slide 14.
 
-**TrustMesh:** hai luật ngưỡng trong cửa sổ 30 giây (`denied_access_burst`, `sybil_identity_burst`), gần SIDS hơn. Nói chủ động: AIDS thật cần mô hình hành vi.
+**TrustMesh:** mỗi node có một sensor gồm **SIDS** (khớp mẫu trong đường dẫn: `../` path traversal, `' or 1=1` SQL injection, `<script` XSS) và **AIDS** (≥ 3 lần bị từ chối cùng nguồn trong 30 giây). Nói chủ động: AIDS ở đây chỉ là luật ngưỡng; AIDS thật cần mô hình hành vi. Mỗi quyết định truy cập đồng thời là sự kiện cho sensor của node đó; cảnh báo được ký rồi gửi cho peer. Màn 3 có cả hai: 3 lần bị từ chối ở node-c → AIDS; Mallory dò `../../etc/passwd` ở node-b → SIDS (khớp mẫu đã biết, khác AIDS là bất thường so với ngưỡng).
 
 ---
 
@@ -181,9 +203,19 @@ Luồng: client chuyển Alice sang authorization server → Alice đăng nhập
 3. **Riêng tư** — chia sẻ cảnh báo có thể lộ dữ liệu nội bộ của từng bên (ⓔ).
 
 **TrustMesh xử lý từng thách thức thế nào:**
-1. Cảnh báo **ký Ed25519**; node nhận gọi `/identity` của node gửi để lấy đúng khóa rồi mới tin. Một node báo **một mình** không tạo incident — cần **2 reporter khác nhau** (quorum). Một node nói dối không đủ để vu oan.
-2. Hai cảnh báo được coi là cùng vụ nếu có cùng *fingerprint* = hash(loại, nguồn, **phút**). *Nên biết:* nếu tấn công rơi đúng ranh giới phút (node A thấy lúc 10:00:59, node B lúc 10:01:00) hoặc đồng hồ hai node lệch nhau, fingerprint khác → không đủ quorum. Ví dụ rất tốt cho ⓓ.
+1. Cảnh báo **ký Ed25519**; node nhận kiểm bằng khóa của reporter đã **ghim** trong keyring (học qua `/identity` lần đầu). Reporter ngoài cluster hoặc chữ ký không khớp → `/peer/alert` trả 400 (không có trong demo). Một node báo **một mình** không tạo incident — cần **2 reporter khác nhau** (quorum). Một node nói dối không đủ để vu oan.
+2. Hai cảnh báo được coi là cùng vụ nếu cùng (loại, nguồn) và đến trong cửa sổ **10 phút tính theo đồng hồ của node nhận**. Không dùng timestamp của node gửi, nên đồng hồ hai node lệch nhau không làm hỏng việc ghép (ⓓ). Cái giá: độ trễ mạng lớn hơn cửa sổ thì vẫn ghép trượt.
 3. Chưa xử lý (dữ liệu demo là mô phỏng).
+
+Demo trải CIDS qua màn 1 và màn 3, mỗi node chỉ thấy phần request đi qua nó (Mallory = `203.0.113.77`):
+
+| Lúc | Node | Sensor thấy | Peer nhận | Kết quả |
+|---|---|---|---|---|
+| Màn 1 | node-a | 3 lần bị từ chối → AIDS | B, C: 1 reporter | chưa thành incident |
+| Màn 3 | node-c | 3 vé bị từ chối → AIDS | A: 2 reporter | **INCIDENT** |
+| Màn 3 | node-b | `../../etc/passwd` → SIDS; 3 lần bị từ chối → AIDS | A, C | incident được cả 3 node xác nhận |
+
+Câu chốt: từng node chỉ thấy một phần; khi nhiều node độc lập cùng báo, cảnh báo mới thành incident. Cảnh báo được ghép theo thời điểm node nhận, không cần đồng hồ chung.
 
 **Chỉ nói (partial failure):** cảnh báo gửi kiểu "bắn rồi quên", timeout 1,5 giây, không gửi lại. Node B chết thì cảnh báo của B mất, nhưng A và C vẫn đủ 2 reporter → incident vẫn được xác nhận. Mỗi node tự giữ danh sách incident của mình, **không có đồng thuận** — các node có thể tạm thời thấy khác nhau.
 
@@ -203,9 +235,9 @@ Luồng: client chuyển Alice sang authorization server → Alice đăng nhập
 
 Kết luận: accuracy cao không có nghĩa là cảnh báo đáng tin, vì tấn công hiếm.
 
-**Vì sao liên quan phân tán (ⓐ ⓔ):** mỗi node tự đo trên dữ liệu nó thấy. Ghép nhiều sensor (CIDS) là cách tăng recall (thấy vụ mà một node bỏ sót) và quorum là cách tăng precision (một cảnh báo lẻ không tạo incident).
+**Vì sao liên quan phân tán (ⓐ ⓔ):** mỗi node tự đo trên dữ liệu nó thấy. Quorum là cách tăng precision (một cảnh báo lẻ không tạo incident). Muốn tăng recall (thấy vụ mà mỗi node đều bỏ sót) thì phải cộng dồn bằng chứng giữa các node, bỏ phiếu thôi thì không đủ.
 
-**TrustMesh:** dashboard tính TP/FP/FN/TN từ `ground_truth`, **riêng từng node**.
+**TrustMesh:** demo **không đếm** TP/FP/FN/TN, nhưng quorum cho thấy đúng sự đánh đổi. Màn 1: cảnh báo lẻ của node-a chưa thành incident → bớt FP. Màn 3: SIDS path traversal chỉ node-b thấy nên vẫn 1 reporter; nếu Mallory chỉ làm vậy thì đó là FN. Câu chốt: quorum giảm báo động giả, nhưng vụ chỉ một node thấy, hoặc rải mỏng dưới ngưỡng của từng node, vẫn lọt.
 
 ---
 

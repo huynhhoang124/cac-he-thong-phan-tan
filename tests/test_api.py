@@ -1,47 +1,74 @@
+"""Một node đơn (không peer) qua TestClient: câu chuyện 4 màn phải chạy trọn vẹn."""
+import pytest
 from fastapi.testclient import TestClient
 
-from demo.main import app, audit
-
+from demo.main import app
 
 client = TestClient(app)
 
 
-def setup_function():
-    audit.clear()
+@pytest.fixture(autouse=True)
+def reset():
+    client.post("/admin/reset")
 
 
-def test_health_and_authorization_scenario():
-    health = client.get("/health")
-    assert health.status_code == 200
-    assert health.json()["status"] == "ok"
-
-    response = client.post("/demo/authorization", json={})
-    assert response.status_code == 200
-    data = response.json()
-    assert data["abac"]["alice_read"]["allowed"] is True
-    assert data["abac"]["mallory_read"]["allowed"] is False
-    assert data["delegation"]["bob_read"]["allowed"] is True
-    assert data["delegation"]["bob_write"]["allowed"] is False
+def act(n):
+    r = client.post(f"/demo/act/{n}")
+    assert r.status_code == 200, r.text
+    data = r.json()
+    assert data["steps"] and data["section"] and data["lesson"]
+    return data
 
 
-def test_sybil_scenario_compares_admission_modes():
-    response = client.post("/demo/sybil", json={"count": 8, "stake_per_identity": 0})
-    assert response.status_code == 200
-    data = response.json()
-    assert len(data["naive_accepted"]) == 8
-    assert data["resistant_accepted"] == []
+def decisions(data):
+    """Trạng thái các bước quyết định truy cập (bỏ bước cảnh báo của sensor)."""
+    return [s["status"] for s in data["steps"] if s.get("model") != "CIDS"]
 
 
-def test_audit_tamper_endpoint_exposes_integrity_failure():
-    client.post("/demo/sybil", json={"count": 2, "stake_per_identity": 0})
-    before = client.get("/audit").json()["verification"]
-    assert before["valid"] is True
-    after = client.post("/audit/tamper-demo", json={}).json()["verification"]
-    assert after["valid"] is False
+def test_act1_reference_monitor_feeds_sensor():
+    data = act(1)
+    assert decisions(data) == ["allow", "deny", "deny", "deny"]
+    alerts = [s for s in data["steps"] if s.get("model") == "CIDS"]
+    assert len(alerts) == 1 and "AIDS 203.0.113.77" in alerts[0]["label"]
 
 
-def test_local_cids_scenario_emits_alerts():
-    response = client.post("/demo/cids", json={})
-    assert response.status_code == 200
-    snapshot = response.json()["local_snapshot"]
-    assert snapshot["alerts"]
+def test_act2_delegation_attenuates():
+    data = act(2)
+    assert decisions(data) == ["allow", "allow", "deny", "allow", "deny"]
+    assert [p["depth"] for p in data["viz"]["chain"]] == [0, 1]
+
+
+def test_act3_forged_tickets_rejected():
+    act(1)
+    act(2)
+    data = act(3)
+    reasons = [s["reason"] for s in data["steps"] if s["status"] == "deny"]
+    assert any("vé cấp cho carol" in r for r in reasons)
+    assert any("chữ ký không khớp" in r for r in reasons)
+    assert any("không thuộc cluster" in r for r in reasons)
+    assert "chưa thành incident" in data["steps"][-1]["label"]  # một node không đủ quorum
+
+
+def test_act4_tamper_detected():
+    act(1)
+    data = act(4)
+    assert data["viz"]["broken_at"] is not None
+    assert client.get("/audit/verify").json()["valid"] is False
+
+
+def test_acts_run_standalone_in_any_order():
+    for n in (4, 3, 2, 1):
+        act(n)
+    assert client.post("/demo/act/5").status_code == 404
+
+
+def test_claims_are_ignored():
+    r = client.post("/access/check", json={"subject": "mallory", "resource": "grades-ds", "action": "read",
+                                           "claims": {"role": "admin"}}).json()
+    assert r["allowed"] is False and r["ignored_claims"] == {"role": "admin"}
+
+
+def test_cluster_and_identity():
+    assert client.get("/identity").json()["node_id"]
+    nodes = client.get("/cluster").json()["nodes"]
+    assert nodes[0]["reachable"] and nodes[0]["audit"]["valid"]

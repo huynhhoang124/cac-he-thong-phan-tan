@@ -5,55 +5,95 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>TrustMesh</title>
   <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="stylesheet" href="/static/styles.css?v=3">
 </head>
 <body>
-  <header>
-    <div>
-      <p class="eyebrow">DISTRIBUTED SYSTEMS · CHƯƠNG 9</p>
+  <header class="top">
+    <div class="brand">
       <h1>TrustMesh</h1>
-      <p class="subtitle">Trust, authorization và collaborative intrusion detection trên ba node độc lập</p>
+      <p>Ba node không tin nhau hoàn toàn vẫn cùng kiểm soát quyền và phát hiện tấn công · Chương 9.4–9.7</p>
     </div>
-    <div id="health" class="status">Đang kết nối…</div>
+    <div class="top-right">
+      <span id="health" class="pill">Đang kết nối…</span>
+      <button id="reset" class="ghost" title="Phím R">Reset <kbd>R</kbd></button>
+    </div>
   </header>
 
-  <main>
-    <section class="architecture">
-      <h2>Trạng thái cluster</h2>
-      <div id="nodes" class="nodes"></div>
-    </section>
+  <main class="layout">
+    <nav class="rail" aria-label="Câu chuyện">
+      <div class="story">
+        <h2>Mallory muốn sửa bảng điểm</h2>
+        <p>Một câu chuyện, bốn màn. Bấm <kbd>→</kbd> để sang màn tiếp, hoặc phím <kbd>1</kbd>–<kbd>4</kbd>.</p>
+      </div>
+      <div class="group" data-sec="auth">
+        <button data-run="1"><kbd>1</kbd><b>Ai được đọc bảng điểm?</b>
+          <span class="why">Cùng một yêu cầu đọc: Alice được, Mallory bị chặn dù tự khai là admin.</span>
+          <small>ABAC · MAC · fail-safe · AuthN ≠ AuthZ</small></button>
+      </div>
+      <div class="group" data-sec="auth">
+        <button data-run="2"><kbd>2</kbd><b>Ủy quyền đi qua ba node</b>
+          <span class="why">Alice cấp vé cho Bob, Bob ủy lại cho Carol. Node khác tự kiểm chữ ký, không cần hỏi lại.</span>
+          <small>capability · delegation</small></button>
+      </div>
+      <div class="group" data-sec="mon">
+        <button data-run="3"><kbd>3</kbd><b>Mallory đổi chiến thuật</b>
+          <span class="why">Mallory dùng vé trộm, vé giả, rồi dò file. Từng node chỉ thấy một phần; hai node cùng báo mới thành sự cố.</span>
+          <small>trust anchor · SIDS/AIDS · quorum</small></button>
+      </div>
+      <div class="group" data-sec="trust">
+        <button data-run="4"><kbd>4</kbd><b>Xóa dấu vết</b>
+          <span class="why">Mallory sửa nhật ký trên một node. Hash chain đứt ngay chỗ bị sửa, các node khác vẫn giữ bản gốc.</span>
+          <small>hash chain · bằng chứng trên nhiều node</small></button>
+      </div>
+      <div class="failure">
+        <h2>Partial failure</h2>
+        <p>Tắt node-b, bấm <kbd>R</kbd> rồi chạy lại 1 → 4. Bob ủy quyền qua node khác, A và C vẫn đủ quorum.</p>
+        <code>docker compose stop node-b</code>
+        <code>docker compose start node-b</code>
+      </div>
+    </nav>
 
-    <section>
-      <h2>Kịch bản trình diễn</h2>
-      <div class="actions">
-        <button data-scenario="authorization">ABAC + delegation</button>
-        <button data-scenario="sybil">Sybil attack</button>
-        <button data-scenario="cids">Collaborative IDS</button>
-        <button data-scenario="tamper">Tamper audit log</button>
-        <button data-scenario="refresh" class="secondary">Làm mới trạng thái</button>
+    <section class="center">
+      <div class="stage" id="stage">
+        <svg class="edges" id="edges" aria-hidden="true"></svg>
+        <div class="actor" id="actor"><span>client</span></div>
+      </div>
+      <p class="legend">
+        <span><i class="dot allow"></i>cho phép</span>
+        <span><i class="dot deny"></i>từ chối</span>
+        <span><i class="dot alert"></i>cảnh báo</span>
+        <span class="muted"><b>key</b> dấu vân tay khóa ký của node · <b>chain</b> nhật ký nối bằng hash · <b>incident</b> sự cố đã đủ 2 node xác nhận</span>
+      </p>
+      <div class="scenario" id="scenario">
+        <div class="scn-head">
+          <h2 id="scn-title">Bấm → để bắt đầu màn 1</h2>
+          <span class="sec" id="scn-sec">TrustMesh</span>
+        </div>
+        <p class="intro" id="scn-intro">Mỗi dòng bên dưới là một yêu cầu thật gửi tới một node, kèm lý do node cho phép hay từ chối.</p>
+        <ol class="steps" id="steps"></ol>
+        <p class="lesson" id="lesson" hidden></p>
       </div>
     </section>
 
-    <section class="results-grid">
-      <div>
-        <h2>Kết quả gần nhất</h2>
-        <pre id="result">Chọn một scenario để bắt đầu.</pre>
-      </div>
-      <div>
-        <h2>Giám sát cộng tác</h2>
-        <div id="metrics" class="metrics"></div>
-        <div id="incidents"></div>
-      </div>
-    </section>
-
-    <section>
-      <h2>Audit chain</h2>
-      <p id="audit-summary"></p>
-      <div id="audit" class="audit"></div>
-    </section>
+    <aside class="side">
+      <section class="card" id="viz-card">
+        <h3 id="viz-title">Minh họa</h3>
+        <p class="hint" id="viz-hint">Kết quả của từng màn hiện ở đây.</p>
+        <div id="viz" class="viz"></div>
+      </section>
+      <section class="card">
+        <h3>Sự cố đã xác nhận <small>quorum ≥ 2</small></h3>
+        <p class="hint">Một node nghi ngờ thì chưa tính. Cần ít nhất hai node độc lập cùng báo một nguồn.</p>
+        <ul id="incidents" class="incidents"><li class="muted">Chưa có</li></ul>
+      </section>
+      <section class="card">
+        <h3>Audit chain <small id="chain-node"></small></h3>
+        <p class="hint">Mỗi bản ghi chứa hash của bản trước. Sửa một bản là chuỗi đứt từ chỗ đó.</p>
+        <div id="chain" class="chain"></div>
+      </section>
+    </aside>
   </main>
-
-  <footer>Demo học thuật. Danh tính người dùng và lưu lượng tấn công đều là dữ liệu mô phỏng.</footer>
-  <script src="/static/app.js" defer></script>
+  <footer>Demo học thuật · danh tính và lưu lượng tấn công là dữ liệu mô phỏng · không TLS · không thay OAuth/IDS production</footer>
+  <script src="/static/app.js?v=3" defer></script>
 </body>
 </html>

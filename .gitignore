@@ -10,3 +10,4 @@ output/playwright/
 .playwright-mcp/
 tmp/
 *.stderr.log
+.data/

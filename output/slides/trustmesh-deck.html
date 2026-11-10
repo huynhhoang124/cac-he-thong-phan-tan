@@ -441,7 +441,6 @@ code{font:500 .86em var(--mono);color:var(--ac2);background:color-mix(in srgb,va
 .model .dx{margin-top:10px;padding-top:10px;border-top:1px dashed rgba(240,195,106,.45);font:500 16px/1.4 var(--sans);color:#ffe3a3}
 .model .q{font:600 15px var(--sans);letter-spacing:.2em;color:var(--dim);margin-top:14px}
 .model .v{font:600 30px/1.3 var(--sans);margin-top:8px;color:#fff}
-.at1:not(.at2) .model.mac{opacity:.28}
 .at1 .model.on{border-color:var(--ac);box-shadow:0 0 50px color-mix(in srgb,var(--ac) 40%,transparent)}
 .badge{position:absolute;right:20px;top:-18px;padding:6px 14px;border-radius:999px;font:800 16px var(--sans);color:#05200f;background:var(--ac);box-shadow:0 0 18px var(--ac)}
 /* 9 ABAC */
@@ -517,8 +516,8 @@ code{font:500 .86em var(--mono);color:var(--ac2);background:color-mix(in srgb,va
 .nd b small{font:500 16px var(--mono);color:var(--ac2);margin-left:8px}
 .nd ul{margin-top:8px}
 .nd li{font-size:19px;margin-top:6px}
-.steps{position:absolute;left:110px;right:110px;top:600px;display:flex;gap:12px}
-.steps div{flex:1;padding:14px 14px 12px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);font:600 17px/1.3 var(--sans)}
+.steps{position:absolute;left:110px;right:110px;top:600px;display:flex;gap:8px}
+.steps div{flex:1;padding:12px 10px 10px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);font:600 17px/1.3 var(--sans)}
 .steps div small{display:flex;justify-content:space-between;font:600 13px var(--mono);color:var(--ac2);margin-bottom:6px}
 .steps div small i{font-style:normal;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;color:#08101c;font:800 11px var(--sans)}
 .go-demo{position:absolute;left:0;right:0;top:730px;text-align:center;font:700 22px var(--sans);letter-spacing:.4em;color:var(--ac2)}
@@ -664,14 +663,14 @@ code{font:500 .86em var(--mono);color:var(--ac2);background:color-mix(in srgb,va
     <h1 class="t xl">Các node <em>không tin nhau.</em><br>Làm sao hệ thống vẫn kiểm soát quyền và phát hiện tấn công?</h1>
     <div class="team"><span data-name="1"></span> · <span data-name="2"></span></div>
   </div>
-  <aside class="xp" data-step="1"><span class="lbl">CHI TIẾT</span><h3>Bài trình bày gồm gì?</h3><p class="def">Nửa sau Chương 9, sách <i>Distributed Systems</i> (4th ed.): một hệ nhiều node, không hoàn toàn tin nhau, làm sao vẫn kiểm soát quyền và phát hiện tấn công.</p><ul><li><b>9.4 Trust</b>: tin process, identity và hệ thống (Hùng).</li><li><b>9.5 Authorization</b>: reference monitor, MAC/DAC/RBAC/ABAC, capability, delegation (Huynh).</li><li><b>9.6 Monitoring</b>: firewall, IDS, collaborative IDS, đo chất lượng (Huynh).</li><li><b>Demo TrustMesh</b>: 3 node Docker chạy thật, nối mọi khái niệm với code.</li></ul><div class="xe"><span>THỜI LƯỢNG</span>Khoảng 20 phút trình bày, 7 phút demo, sau đó hỏi đáp.</div></aside>
+  <aside class="xp" data-step="1"><span class="lbl">CHI TIẾT</span><h3>Bài trình bày gồm gì?</h3><p class="def">Nửa sau Chương 9, sách <i>Distributed Systems</i> (4th ed.): một hệ nhiều node, không hoàn toàn tin nhau, làm sao vẫn kiểm soát quyền và phát hiện tấn công.</p><ul><li><b>9.4 Trust</b>: tin process, identity và hệ thống (Hùng).</li><li><b>9.5 Authorization</b>: reference monitor, MAC/DAC/RBAC/ABAC, capability, delegation (Huynh).</li><li><b>9.6 Monitoring</b>: firewall, IDS, collaborative IDS, đo chất lượng (Huynh).</li><li><b>Demo TrustMesh</b>: 3 node Docker chạy thật, một câu chuyện 4 màn “Mallory muốn sửa bảng điểm”, nối mọi khái niệm với code.</li></ul><div class="xe"><span>THỜI LƯỢNG</span>Khoảng 20 phút trình bày, 5 phút demo, sau đó hỏi đáp.</div></aside>
 </section>
 
 <!-- ============ 2. BẢNG ĐIỂM ============ -->
 <section class="slide" data-sec="intro" data-spk="1" data-time="0:40"
   data-notes="Ai được đọc? Ai được ghi? Nếu Mallory tấn công thì ai phát hiện? Ba câu hỏi này là ba phần của bài. (Click: ba node A, B, C hiện ra, mỗi node giữ một bản sao policy.)">
   <div class="hdr"><div class="kicker">MỞ ĐẦU · VÍ DỤ XUYÊN SUỐT</div>
-    <h2 class="t">Suốt bài, ta theo dõi một tài nguyên: <em>bảng điểm</em> <code>grades-ds-2026</code></h2></div>
+    <h2 class="t">Suốt bài, ta theo dõi một tài nguyên: <em>bảng điểm</em> <code>grades-ds</code></h2></div>
   <svg class="viz" viewBox="0 0 1600 900">
     <path class="flow a-fade" style="--d:1.6s" d="M545 430 L715 520"/>
     <path class="flow a-fade" style="--d:1.8s" d="M420 650 L715 600"/>
@@ -681,9 +680,9 @@ code{font:500 .86em var(--mono);color:var(--ac2);background:color-mix(in srgb,va
     </g>
   </svg>
   <div class="doc a-pop" style="--d:.9s"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-  <div class="doc-n a" style="--d:1.1s">grades-ds-2026</div>
+  <div class="doc-n a" style="--d:1.1s">grades-ds</div>
   <div class="who a" style="left:150px;top:385px;--d:1.3s"><div class="av" style="--c:var(--alice)">A</div>
-    <div><b>Alice</b><span class="chip">teacher</span><span class="chip">cs</span><span class="chip">confidential</span></div></div>
+    <div><b>Alice</b><span class="chip">teacher</span><span class="chip">cs</span><span class="chip">restricted</span></div></div>
   <div class="who a" style="left:150px;top:605px;--d:1.5s"><div class="av" style="--c:var(--bob)">B</div>
     <div><b>Bob</b><span class="chip">student</span><span class="chip">cs</span></div></div>
   <div class="who a" style="left:1060px;top:518px;--d:1.7s"><div class="av" style="--c:var(--mallory)">M</div>
@@ -693,7 +692,7 @@ code{font:500 .86em var(--mono);color:var(--ac2);background:color-mix(in srgb,va
     <div class="node" style="left:725px;top:318px">NODE B<small>policy</small></div>
     <div class="node" style="left:890px;top:318px">NODE C<small>policy</small></div>
   </div>
-  <aside class="xp" data-step="2"><span class="lbl">CHI TIẾT</span><h3>Một ví dụ cho cả bài</h3><p class="def">Mọi khái niệm đều được thử trên cùng một tài nguyên: bảng điểm <code>grades-ds-2026</code> của môn Hệ phân tán, do ba node A, B, C cùng phục vụ.</p><ul><li><b>Alice</b>: giảng viên môn CS, clearance confidential, được đọc và ghi.</li><li><b>Bob</b>: sinh viên CS, quyền hẹp, nhận vé chỉ đọc do Alice cấp.</li><li><b>Mallory</b>: khách (public), kẻ tấn công: đọc trộm, tạo identity giả.</li><li>Mỗi node giữ policy riêng, không node nào làm trọng tài chung.</li></ul><div class="xe"><span>BA CÂU HỎI CỦA BÀI</span>Ai được đọc? Ai được ghi? Mallory tấn công thì ai phát hiện?</div></aside>
+  <aside class="xp" data-step="2"><span class="lbl">CHI TIẾT</span><h3>Một ví dụ cho cả bài</h3><p class="def">Mọi khái niệm đều được thử trên cùng một tài nguyên: bảng điểm <code>grades-ds</code> của môn Hệ phân tán, do ba node A, B, C cùng phục vụ.</p><ul><li><b>Alice</b>: giảng viên môn DS khoa CS, clearance restricted, được đọc và ghi.</li><li><b>Bob</b>: sinh viên CS, quyền hẹp, nhận vé do Alice cấp rồi ủy tiếp cho Carol.</li><li><b>Mallory</b>: khách (public), kẻ tấn công: đọc trộm, giả vé, xóa dấu vết.</li><li>Mỗi node giữ policy riêng, không node nào làm trọng tài chung.</li></ul><div class="xe"><span>BA CÂU HỎI CỦA BÀI</span>Ai được đọc? Ai được ghi? Mallory tấn công thì ai phát hiện?</div></aside>
 </section>
 
 <!-- ============ 3. BA LỚP ============ -->
@@ -717,7 +716,7 @@ code{font:500 .86em var(--mono);color:var(--ac2);background:color-mix(in srgb,va
 
 <!-- ============ 4a. TRUST LÀ GÌ ============ -->
 <section class="slide" data-sec="trust" data-spk="1" data-time="0:40" data-sweep="9.4 · TRUST"
-  data-notes="Trust là sự bảo đảm rằng một thực thể sẽ hành xử như ta kỳ vọng. Trên một máy, ta tin hệ điều hành vì nó nằm ngay đó. Trong hệ phân tán, bên kia là một máy khác, ta chỉ thấy message của nó, nên niềm tin phải dựa vào bằng chứng kiểm được: chữ ký, đa số, chuỗi hash. (Click 1: sách chia 9.4 thành ba câu hỏi: tin một process, tin một identity, tin một hệ thống; ba slide tiếp theo đi lần lượt.) (Click 2: trong TrustMesh, danh tính của node chính là khóa công khai Ed25519.)">
+  data-notes="Trust là sự bảo đảm rằng một thực thể sẽ hành xử như ta kỳ vọng. Trên một máy, ta tin hệ điều hành vì nó nằm ngay đó. Trong hệ phân tán, bên kia là một máy khác, ta chỉ thấy message của nó, nên niềm tin phải dựa vào bằng chứng kiểm được: chữ ký, đa số, chuỗi hash. (Click 1: sách chia 9.4 thành ba câu hỏi: tin một process, tin một identity, tin một hệ thống; ba slide tiếp theo đi lần lượt.) (Click 2: trong TrustMesh, danh tính của node chính là khóa công khai Ed25519. Node học khóa của peer lần đầu qua /identity rồi ghim lại (trust on first use); về sau peer đổi khóa cũng không được chấp nhận.)">
   <div class="hdr"><div class="kicker">9.4 · TRUST LÀ GÌ</div>
     <h2 class="t">Tin một bên là kỳ vọng nó <em>hành xử đúng như đã hứa.</em></h2></div>
   <div class="card a" style="left:110px;top:300px;width:1380px;padding:22px 30px;--d:.9s"><span class="lbl">ĐỊNH NGHĨA</span>
@@ -725,8 +724,8 @@ code{font:500 .86em var(--mono);color:var(--ac2);background:color-mix(in srgb,va
   <div class="card tq" data-step="1" style="left:110px"><span class="lbl">9.4.1</span><h4>Tin một process</h4><p>Process có thể trả lời sai, im lặng hoặc nói dối.</p><div class="to">→ Byzantine fault tolerance</div></div>
   <div class="card tq" data-step="1" style="left:580px;transition-delay:.12s"><span class="lbl">9.4.2</span><h4>Tin một identity</h4><p>Một kẻ có thể đội nhiều danh tính cùng lúc.</p><div class="to">→ Sybil attack</div></div>
   <div class="card tq" data-step="1" style="left:1050px;transition-delay:.24s"><span class="lbl">9.4.3</span><h4>Tin một hệ thống</h4><p>Tin vào cấu trúc dữ liệu và giao thức thay vì tin người.</p><div class="to">→ Hash chain, blockchain</div></div>
-  <div class="tm" data-step="2"><span class="lbl">TRONG TRUSTMESH</span><span>Mỗi node có khóa <b>Ed25519</b> riêng. Danh tính của node = khóa công khai, công bố ở <code>/identity</code>; node khác dùng khóa này để kiểm chữ ký cảnh báo.</span></div>
-  <aside class="xp" data-step="3"><span class="lbl">CHI TIẾT</span><h3>Trust trong hệ phân tán</h3><p class="def">Trust là sự bảo đảm rằng một thực thể sẽ hành xử như kỳ vọng. Khác với máy đơn, ta không quan sát trực tiếp bên kia mà chỉ nhận message của nó.</p><ul><li><b>Bằng chứng</b> thay cho lời tự nhận: chữ ký số, đa số phiếu, chuỗi hash.</li><li><b>Giả định</b> phải ghi rõ: tối đa bao nhiêu node xấu, ai cấp danh tính.</li><li><b>Ba đối tượng</b> cần tin: process (9.4.1), identity (9.4.2), hệ thống (9.4.3).</li></ul><div class="xe"><span>TRONG TRUSTMESH</span>Node B chỉ tin cảnh báo của node A khi chữ ký khớp khóa công khai mà A công bố ở <code>/identity</code>.</div></aside>
+  <div class="tm" data-step="2"><span class="lbl">TRONG TRUSTMESH</span><span>Mỗi node có khóa <b>Ed25519</b> riêng. Danh tính của node = khóa công khai ở <code>/identity</code>; node khác học khóa lần đầu rồi <b>ghim lại</b> (TOFU) để kiểm chữ ký cảnh báo và vé.</span></div>
+  <aside class="xp" data-step="3"><span class="lbl">CHI TIẾT</span><h3>Trust trong hệ phân tán</h3><p class="def">Trust là sự bảo đảm rằng một thực thể sẽ hành xử như kỳ vọng. Khác với máy đơn, ta không quan sát trực tiếp bên kia mà chỉ nhận message của nó.</p><ul><li><b>Bằng chứng</b> thay cho lời tự nhận: chữ ký số, đa số phiếu, chuỗi hash.</li><li><b>Giả định</b> phải ghi rõ: tối đa bao nhiêu node xấu, ai cấp danh tính.</li><li><b>Ba đối tượng</b> cần tin: process (9.4.1), identity (9.4.2), hệ thống (9.4.3).</li></ul><div class="xe"><span>TRONG TRUSTMESH</span>Node B chỉ tin cảnh báo hay vé của node A khi chữ ký khớp khóa của A mà B đã ghim từ <code>/identity</code>. Khóa lạ hoặc khóa bị đổi đều bị từ chối.</div></aside>
 </section>
 
 <!-- ============ 4. BYZANTINE: HÀNH VI ============ -->
@@ -778,7 +777,7 @@ code{font:500 .86em var(--mono);color:var(--ac2);background:color-mix(in srgb,va
 
 <!-- ============ 5. SYBIL ============ -->
 <section class="slide" data-sec="trust" data-spk="1" data-time="1:10"
-  data-notes="Byzantine giả định số node xấu không vượt k. Sybil phá đúng giả định đó: một kẻ tấn công tự tạo nhiều identity, nên k không còn bị chặn. (Click 1: hai mục tiêu. Một là chiếm đa số trong biểu quyết. Hai là eclipse: bao vây một node trung thực bằng toàn hàng giả để cô lập nó.) (Click 2: ba cách chống. CA tập trung ràng buộc mỗi người một chứng chỉ nhưng cần một trung tâm. Hệ phi tập trung làm identity trở nên đắt bằng PoW hoặc PoS. Reputation thì identity mới chưa có uy tín nên ảnh hưởng nhỏ.) (Click 3: số liệu demo. Đây là mô hình minh họa, không phải giải pháp Sybil hoàn chỉnh, đúng như câu lesson trong code.)">
+  data-notes="Byzantine giả định số node xấu không vượt k. Sybil phá đúng giả định đó: một kẻ tấn công tự tạo nhiều identity, nên k không còn bị chặn. (Click 1: hai mục tiêu. Một là chiếm đa số trong biểu quyết. Hai là eclipse: bao vây một node trung thực bằng toàn hàng giả để cô lập nó.) (Click 2: ba cách chống. CA tập trung ràng buộc mỗi người một chứng chỉ nhưng cần một trung tâm. Hệ phi tập trung làm identity trở nên đắt bằng PoW hoặc PoS. Reputation thì identity mới chưa có uy tín nên ảnh hưởng nhỏ.) (Click 3: Sybil không có trong demo, chỉ nói trên slide. TrustMesh là cluster đóng: chỉ khóa đã ghim trong keyring mới được tin, giống CA tập trung thu nhỏ. Ở màn 3, Mallory tự phát vé bằng khóa riêng và bị từ chối vì khóa không thuộc cluster. Cái giá: cluster đóng không mở cho người lạ tham gia, nên đây không phải lời giải Sybil cho hệ mở.)">
   <div class="hdr"><div class="kicker">9.4.2 · TRUSTING AN IDENTITY · SYBIL</div>
     <h2 class="t">Sybil phá giả định <em>một identity ứng với một thực thể.</em></h2></div>
   <svg class="viz" viewBox="0 0 1600 900">
@@ -805,12 +804,8 @@ code{font:500 .86em var(--mono);color:var(--ac2);background:color-mix(in srgb,va
     <div class="row"><i class="k">1</i><span><b>CA tập trung</b><br><small>một người, một chứng chỉ, nhưng cần trung tâm</small></span></div>
     <div class="row"><i class="k">2</i><span><b>PoW / PoS</b><br><small>mỗi identity tốn công tính toán hoặc tiền cược</small></span></div>
     <div class="row"><i class="k">3</i><span><b>Reputation</b><br><small>identity mới chưa có uy tín, ảnh hưởng nhỏ</small></span></div></div>
-  <div class="tm" data-step="3"><span class="lbl">TRONG TRUSTMESH</span>
-    <span style="white-space:nowrap">1 attacker, 10 identity:</span>
-    <span>Naive <span class="big-n r" data-count="10">0</span><span class="big-n">/10</span></span>
-    <span>Resistant <span class="big-n g">0</span><span class="big-n">/10</span></span>
-    <span style="font-size:17px;color:var(--dim)">luật: stake ≥ 10 và fingerprint mới<br>đủ stake cũng chỉ nhận tối đa 1</span></div>
-  <aside class="xp" data-step="4"><span class="lbl">CHI TIẾT</span><h3>Sybil attack</h3><p class="def">Một thực thể tạo nhiều danh tính giả để có ảnh hưởng lớn hơn phần của mình, nhất là trong hệ mở nơi ai cũng tham gia được.</p><ul><li><b>Phá giả định</b> "số node xấu ≤ k" của Byzantine.</li><li><b>Mục tiêu</b>: chiếm đa số phiếu, hoặc eclipse (vây một node trung thực bằng toàn node giả).</li><li><b>Tập trung</b>: CA cấp một chứng chỉ cho mỗi thực thể thật.</li><li><b>Phi tập trung</b>: làm identity đắt (PoW, PoS) hoặc dựa vào uy tín tích lũy.</li></ul><div class="xe"><span>TRONG TRUSTMESH</span>10 identity, stake 0: naive nhận 10, resistant nhận 0. Đủ stake cũng chỉ nhận 1 vì chung fingerprint.</div></aside>
+  <div class="tm" data-step="3"><span class="lbl">TRONG TRUSTMESH</span><span>Không demo Sybil. Cluster <b>đóng</b>: chỉ tin khóa đã ghim trong keyring → màn 3, vé Mallory <b>tự ký bằng khóa riêng</b> bị từ chối vì khóa không thuộc cluster.</span></div>
+  <aside class="xp" data-step="4"><span class="lbl">CHI TIẾT</span><h3>Sybil attack</h3><p class="def">Một thực thể tạo nhiều danh tính giả để có ảnh hưởng lớn hơn phần của mình, nhất là trong hệ mở nơi ai cũng tham gia được.</p><ul><li><b>Phá giả định</b> "số node xấu ≤ k" của Byzantine.</li><li><b>Mục tiêu</b>: chiếm đa số phiếu, hoặc eclipse (vây một node trung thực bằng toàn node giả).</li><li><b>Tập trung</b>: CA cấp một chứng chỉ cho mỗi thực thể thật.</li><li><b>Phi tập trung</b>: làm identity đắt (PoW, PoS) hoặc dựa vào uy tín tích lũy.</li></ul><div class="xe"><span>TRONG TRUSTMESH</span>Không có demo Sybil. Cluster đóng, chỉ tin khóa trong keyring (giống CA thu nhỏ): khóa tự tạo bị từ chối, nhưng người lạ cũng không tham gia được.</div></aside>
 </section>
 
 <!-- ============ 6. HASH CHAIN ============ -->
@@ -828,8 +823,8 @@ code{font:500 .86em var(--mono);color:var(--ac2);background:color-mix(in srgb,va
   <div class="xmark" style="left:1310px;top:395px">✗</div>
   <div class="abs" data-step="1" style="left:860px;top:578px;width:250px;text-align:center;font:600 18px var(--sans);color:#ff8fa3">bị sửa → hash lệch</div>
   <div class="warn" data-step="2" style="left:110px;top:628px;right:110px"><span>Kẻ chiếm được cả node có thể <b>tính lại toàn bộ chuỗi</b> → phải neo hash mới nhất ở bên khác hoặc nhân bản chuỗi.</span></div>
-  <div class="tm" style="--d:2.2s"><span class="lbl">TRONG TRUSTMESH</span><span>Hash = <code>SHA-256(hash trước + nội dung)</code>. Demo <code>/audit/tamper-demo</code> sửa bản ghi đầu → <code>/audit/verify</code> trả <code>broken_at: 0</code>.</span></div>
-  <aside class="xp" data-step="3"><span class="lbl">CHI TIẾT</span><h3>Phát hiện sửa đổi bằng hash</h3><p class="def">Mỗi bản ghi lưu hash của bản ghi trước. Sửa một bản ghi cũ làm hash của nó đổi, mọi mắt xích phía sau không còn khớp.</p><ul><li><b>Append-only</b>: chỉ ghi thêm, không sửa.</li><li><b>Phát hiện</b>, không ngăn chặn: kiểm lại chuỗi sẽ thấy chỗ đứt.</li><li><b>Giới hạn</b>: kẻ kiểm soát toàn bộ chuỗi có thể tính lại mọi hash.</li><li><b>Neo</b> hash mới nhất ở bên khác hoặc nhân bản chuỗi để chống điều đó.</li></ul><div class="xe"><span>TRONG TRUSTMESH</span><code>/audit/verify</code> duyệt lại toàn chuỗi; demo sửa bản ghi 0 → <code>valid: false, broken_at: 0</code>.</div></aside>
+  <div class="tm" style="--d:2.2s"><span class="lbl">TRONG TRUSTMESH</span><span>Hash = <code>SHA-256(hash trước + nội dung)</code>. Màn 4: Mallory chiếm node-a, sửa bản ghi “mallory ghi grades-ds bị từ chối” (từ màn 1) thành được phép → <code>/audit/verify</code> trả <code>broken_at</code> đúng bản ghi đó.</span></div>
+  <aside class="xp" data-step="3"><span class="lbl">CHI TIẾT</span><h3>Phát hiện sửa đổi bằng hash</h3><p class="def">Mỗi bản ghi lưu hash của bản ghi trước. Sửa một bản ghi cũ làm hash của nó đổi, mọi mắt xích phía sau không còn khớp.</p><ul><li><b>Append-only</b>: chỉ ghi thêm, không sửa.</li><li><b>Phát hiện</b>, không ngăn chặn: kiểm lại chuỗi sẽ thấy chỗ đứt.</li><li><b>Giới hạn</b>: kẻ kiểm soát toàn bộ chuỗi có thể tính lại mọi hash.</li><li><b>Neo</b> hash mới nhất ở bên khác hoặc nhân bản chuỗi để chống điều đó.</li></ul><div class="xe"><span>TRONG TRUSTMESH</span><code>/audit/verify</code> duyệt lại toàn chuỗi; sửa bản ghi “mallory bị từ chối” thành <code>allowed: true</code> → <code>valid: false</code>, <code>broken_at</code> trỏ đúng bản ghi đó.</div></aside>
 </section>
 
 <!-- ============ 6b. BLOCKCHAIN ============ -->
@@ -882,7 +877,7 @@ code{font:500 .86em var(--mono);color:var(--ac2);background:color-mix(in srgb,va
 
 <!-- ============ 7b. AUTHN / AUTHZ ============ -->
 <section class="slide" data-sec="auth" data-spk="2" data-time="0:40"
-  data-notes="Authentication trả lời: bạn là ai. Authorization trả lời: bạn được làm gì. Authorization chỉ đúng khi đầu vào của nó là thật. (Click 1: trong hệ phân tán node chỉ thấy message; ai cũng gõ được role teacher, nên thuộc tính phải do một bên đáng tin ký, ví dụ phòng đào tạo. Đây là chỗ nối với 9.4 Trust.) (Click 2: nói thật về demo: client tự gửi thuộc tính vì là dữ liệu mô phỏng; hệ thật lấy thuộc tính từ token có chữ ký.)">
+  data-notes="Authentication trả lời: bạn là ai. Authorization trả lời: bạn được làm gì. Authorization chỉ đúng khi đầu vào của nó là thật. (Click 1: trong hệ phân tán node chỉ thấy message; ai cũng gõ được role teacher, nên thuộc tính phải do một bên đáng tin ký, ví dụ phòng đào tạo. Đây là chỗ nối với 9.4 Trust.) (Click 2: TrustMesh tra thuộc tính trong attribute directory phía server; Mallory tự khai role admin thì bị bỏ qua, vẫn bị từ chối, đúng như màn 1 của demo. Directory nằm cứng trong code; hệ thật lấy thuộc tính từ token có chữ ký.)">
   <div class="hdr"><div class="kicker">9.5 · XÁC THỰC VÀ PHÂN QUYỀN</div><span class="dt"><i>2</i>CHỈ CÓ MESSAGE</span><span class="dt"><i>5</i>NHIỀU TỔ CHỨC</span>
     <h2 class="t">Biết <em>ai đang hỏi</em> rồi mới quyết <em>được làm gì.</em></h2></div>
   <svg class="viz" viewBox="0 0 1600 900">
@@ -901,13 +896,13 @@ code{font:500 .86em var(--mono);color:var(--ac2);background:color-mix(in srgb,va
     <div class="card" style="left:110px;top:585px;width:290px;padding:16px 22px"><span class="lbl">BÊN BẢO LÃNH</span><h4 style="font-size:22px;margin:6px 0 2px">Phòng đào tạo</h4><p style="font-size:16px">ký: alice = teacher môn DS</p></div>
     <div class="abs" style="left:480px;top:598px;width:1010px;font:500 23px/1.45 var(--sans);color:#e6ecfa">Node chỉ thấy <b>message</b>. Ai cũng gõ được “role: teacher”, nên thuộc tính phải có <b>chữ ký của bên đáng tin</b>. Đây chính là <b style="color:#a9d2ff">9.4 Trust</b>.</div>
   </div>
-  <div class="tm" data-step="2"><span class="lbl">TRONG TRUSTMESH</span><span>Demo để client tự gửi <code>role</code>, <code>clearance</code> (dữ liệu mô phỏng) → Mallory tự khai <code>admin</code> vẫn qua. Hệ thật lấy thuộc tính từ token có chữ ký.</span></div>
-  <aside class="xp" data-step="3"><span class="lbl">CHI TIẾT</span><h3>Xác thực trước, phân quyền sau</h3><p class="def">Authentication xác minh danh tính (bạn là ai). Authorization quyết định hành động nào được phép (bạn được làm gì). Authorization chỉ đúng khi đầu vào của nó là thật.</p><ul><li><b>AuthN</b>: mật khẩu, chữ ký, chứng chỉ, token.</li><li><b>AuthZ</b>: tra policy với danh tính và thuộc tính đã xác thực.</li><li><b>Phân tán</b>: node chỉ thấy message, nên thuộc tính phải do một bên đáng tin ký (attribute authority).</li></ul><div class="xe"><span>TRONG TRUSTMESH</span>Demo để client tự khai <code>role</code>, <code>clearance</code> (dữ liệu mô phỏng); hệ thật lấy từ token có chữ ký.</div></aside>
+  <div class="tm" data-step="2"><span class="lbl">TRONG TRUSTMESH</span><span>Thuộc tính tra ở <b>directory phía server</b> → Mallory tự khai <code>role: admin</code> bị bỏ qua, vẫn DENY (màn 1). Hệ thật lấy thuộc tính từ token có chữ ký.</span></div>
+  <aside class="xp" data-step="3"><span class="lbl">CHI TIẾT</span><h3>Xác thực trước, phân quyền sau</h3><p class="def">Authentication xác minh danh tính (bạn là ai). Authorization quyết định hành động nào được phép (bạn được làm gì). Authorization chỉ đúng khi đầu vào của nó là thật.</p><ul><li><b>AuthN</b>: mật khẩu, chữ ký, chứng chỉ, token.</li><li><b>AuthZ</b>: tra policy với danh tính và thuộc tính đã xác thực.</li><li><b>Phân tán</b>: node chỉ thấy message, nên thuộc tính phải do một bên đáng tin ký (attribute authority).</li></ul><div class="xe"><span>TRONG TRUSTMESH</span>Thuộc tính lấy từ attribute directory phía server; <code>claims</code> client tự khai luôn bị bỏ qua. Directory nằm cứng trong code; hệ thật lấy từ token có chữ ký.</div></aside>
 </section>
 
 <!-- ============ 7. REFERENCE MONITOR ============ -->
 <section class="slide" data-sec="auth" data-spk="2" data-time="0:50"
-  data-notes="Trên một máy, kernel là reference monitor duy nhất. (Click 1: ba yêu cầu; fail-safe còn có nghĩa là mất kết nối khi tra thông tin thì cũng từ chối.) (Click 2: trong hệ phân tán mỗi node là một cửa vào, cửa nào cũng cần bảo vệ, và tất cả phải dùng cùng phiên bản policy. Node C còn policy cũ là lỗ hổng. TrustMesh: mỗi node tự chạy PolicyEngine; policy nằm trong code nên nhất quán theo lần triển khai, đổi policy phải triển khai lại cả ba node.)">
+  data-notes="Trên một máy, kernel là reference monitor duy nhất. (Click 1: ba yêu cầu; fail-safe còn có nghĩa là mất kết nối khi tra thông tin thì cũng từ chối.) (Click 2: trong hệ phân tán mỗi node là một cửa vào, cửa nào cũng cần bảo vệ, và tất cả phải dùng cùng phiên bản policy. Node C còn policy cũ là lỗ hổng. TrustMesh: mỗi node tự chạy evaluate() trong authz.py; policy nằm trong code nên nhất quán theo lần triển khai, đổi policy phải triển khai lại cả ba node.)">
   <div class="hdr"><div class="kicker">9.5 · ACCESS CONTROL</div><span class="dt"><i>1</i>KHÔNG TRUNG TÂM</span><span class="dt"><i>3</i>LỖI CỤC BỘ</span>
     <h2 class="t">Mọi request phải đi qua <em>reference monitor.</em></h2></div>
   <div class="v7a">
@@ -925,7 +920,7 @@ code{font:500 .86em var(--mono);color:var(--ac2);background:color-mix(in srgb,va
     <text x="800" y="475" text-anchor="middle" fill="#fff" font-family="Be Vietnam Pro" font-weight="800" font-size="24">MONITOR</text>
   </svg>
   <div class="card a" style="left:130px;top:390px;width:260px;--d:.8s;text-align:center"><span class="lbl">SUBJECT</span><h4 style="margin:6px 0 0">Bob</h4></div>
-  <div class="card a" style="left:1210px;top:370px;width:280px;--d:1s;text-align:center"><span class="lbl">OBJECT</span><h4 style="margin:6px 0 0;font-size:21px"><code>grades-ds-2026</code></h4></div>
+  <div class="card a" style="left:1210px;top:370px;width:280px;--d:1s;text-align:center"><span class="lbl">OBJECT</span><h4 style="margin:6px 0 0;font-size:21px"><code>grades-ds</code></h4></div>
   <div class="branch a-pop" style="left:1100px;top:525px;color:#ff8fa3;border:1px solid var(--bad);background:rgba(255,77,109,.12);--d:2.2s">DENY</div>
   <div class="branch a-pop" style="left:1010px;top:372px;color:#a6f5c8;--d:2s">ALLOW</div>
   </div>
@@ -940,42 +935,42 @@ code{font:500 .86em var(--mono);color:var(--ac2);background:color-mix(in srgb,va
     <div class="card" style="left:580px;top:590px;width:440px;padding:16px 24px"><h4 style="font-size:22px;margin:0">Tamperproof</h4><p style="font-size:17px">Không ai sửa được bộ kiểm tra</p></div>
     <div class="card" style="left:1050px;top:590px;width:440px;padding:16px 24px"><h4 style="font-size:22px;margin:0">Fail-safe default</h4><p style="font-size:17px">Không có luật hoặc mất kết nối → từ chối</p></div>
   </div>
-  <div class="tm" style="--d:2.6s"><span class="lbl">TRONG TRUSTMESH</span><code style="font-size:19px">return Decision(False, "Fail-safe default: không có luật cho phép phù hợp")</code></div>
-  <aside class="xp" data-step="3"><span class="lbl">CHI TIẾT</span><h3>Reference monitor</h3><p class="def">Thành phần đứng giữa subject và object, kiểm tra mọi yêu cầu theo policy trước khi cho phép.</p><ul><li><b>Complete mediation</b>: mọi đường truy cập đều đi qua nó.</li><li><b>Tamperproof</b>: không ai sửa được nó hay policy của nó.</li><li><b>Fail-safe default</b>: không có luật cho phép thì từ chối.</li><li><b>Phân tán</b>: mỗi node là một cửa vào; cửa nào cũng cần monitor và các monitor phải dùng cùng một bản policy.</li></ul><div class="xe"><span>TRONG TRUSTMESH</span>Mỗi node chạy <code>PolicyEngine</code> riêng; dòng cuối <code>evaluate()</code> trả <code>Decision(False)</code> khi không luật nào khớp.</div></aside>
+  <div class="tm" style="--d:2.6s"><span class="lbl">TRONG TRUSTMESH</span><code style="font-size:19px">return Decision(False, "fail-safe", "không luật nào cho phép → mặc định từ chối")</code></div>
+  <aside class="xp" data-step="3"><span class="lbl">CHI TIẾT</span><h3>Reference monitor</h3><p class="def">Thành phần đứng giữa subject và object, kiểm tra mọi yêu cầu theo policy trước khi cho phép.</p><ul><li><b>Complete mediation</b>: mọi đường truy cập đều đi qua nó.</li><li><b>Tamperproof</b>: không ai sửa được nó hay policy của nó.</li><li><b>Fail-safe default</b>: không có luật cho phép thì từ chối.</li><li><b>Phân tán</b>: mỗi node là một cửa vào; cửa nào cũng cần monitor và các monitor phải dùng cùng một bản policy.</li></ul><div class="xe"><span>TRONG TRUSTMESH</span>Mỗi node chạy <code>evaluate()</code> riêng (<code>authz.py</code>); không luật nào khớp, hoặc subject lạ, đều trả <code>Decision(False, "fail-safe")</code>.</div></aside>
 </section>
 
 <!-- ============ 8. BỐN MÔ HÌNH ============ -->
 <section class="slide" data-sec="auth" data-spk="2" data-time="0:50"
-  data-notes="Một ví dụ cho mỗi mô hình, cùng bảng điểm. MAC: nhãn do trung tâm đặt. DAC: chủ sở hữu tự chia sẻ. RBAC: quyền gắn vai trò. ABAC: kết hợp nhiều thuộc tính, chi tiết nhất nhưng policy phức tạp nhất. (Click 1: TrustMesh dùng ba mô hình theo thứ tự.) (Click 2: khó khăn khi phân tán: MAC cần cơ quan trung tâm gán nhãn; DAC để mỗi chủ sở hữu tự quyết nên khó kiểm soát chung; RBAC cần mọi node hiểu vai trò giống nhau; ABAC phải lấy thuộc tính từ nhiều máy, máy đó có thể chậm hoặc đang lỗi.)">
+  data-notes="Một ví dụ cho mỗi mô hình, cùng bảng điểm. MAC: nhãn do trung tâm đặt. DAC: chủ sở hữu tự chia sẻ. RBAC: quyền gắn vai trò. ABAC: kết hợp nhiều thuộc tính, chi tiết nhất nhưng policy phức tạp nhất. (Click 1: TrustMesh dùng cả bốn mô hình theo thứ tự: admin → RBAC, chủ sở hữu → DAC, nhãn thấp hơn → MAC từ chối, còn lại → ABAC, không khớp → fail-safe. Màn 1 của demo cho thấy ABAC (Alice được đọc) và MAC (Mallory bị chặn); màn 3, đường dẫn ../../etc/passwd không có trong directory nên rơi vào fail-safe.) (Click 2: khó khăn khi phân tán: MAC cần cơ quan trung tâm gán nhãn; DAC để mỗi chủ sở hữu tự quyết nên khó kiểm soát chung; RBAC cần mọi node hiểu vai trò giống nhau; ABAC phải lấy thuộc tính từ nhiều máy, máy đó có thể chậm hoặc đang lỗi.)">
   <div class="hdr"><div class="kicker">9.5.1 · MÔ HÌNH KIỂM SOÁT TRUY CẬP</div><span class="dt"><i>1</i>KHÔNG TRUNG TÂM</span><span class="dt"><i>5</i>NHIỀU TỔ CHỨC</span>
     <h2 class="t">Bốn mô hình khác nhau ở chỗ: <em>quyết định dựa vào cái gì.</em></h2></div>
-  <div class="card model mac a" style="left:110px;--d:.8s"><b>MAC</b><div class="q">DỰA VÀO</div><div class="v">Nhãn bảo mật</div><div class="ex">grades = confidential, cần clearance đủ</div><div class="dx" data-step="2">Cần một cơ quan trung tâm gán nhãn</div></div>
+  <div class="card model on a" style="left:110px;--d:.8s"><b>MAC</b><div class="q">DỰA VÀO</div><div class="v">Nhãn bảo mật</div><div class="ex">grades = confidential, cần clearance đủ</div><div class="dx" data-step="2">Cần một cơ quan trung tâm gán nhãn</div><span class="badge" data-step="1">③ nhãn</span></div>
   <div class="card model on a" style="left:461px;--d:1s"><b>DAC</b><div class="q">DỰA VÀO</div><div class="v">Chủ sở hữu</div><div class="ex">Giảng viên tự chia sẻ cho trợ giảng</div><div class="dx" data-step="2">Mỗi chủ sở hữu tự quyết, khó kiểm soát chung</div><span class="badge" data-step="1">② owner</span></div>
   <div class="card model on a" style="left:812px;--d:1.2s"><b>RBAC</b><div class="q">DỰA VÀO</div><div class="v">Vai trò</div><div class="ex">Mọi teacher được ghi điểm</div><div class="dx" data-step="2">Mọi node phải hiểu “teacher” giống nhau</div><span class="badge" data-step="1">① admin</span></div>
-  <div class="card model on a" style="left:1163px;--d:1.4s"><b>ABAC</b><div class="q">DỰA VÀO</div><div class="v">Nhiều thuộc tính</div><div class="ex">teacher + đúng môn + cùng khoa + campus</div><div class="dx" data-step="2">Thuộc tính nằm ở nhiều máy khác nhau</div><span class="badge" data-step="1">③ còn lại</span></div>
-  <div class="tm" data-step="1"><span class="lbl">TRONG TRUSTMESH</span><span><code>PolicyEngine</code> xét theo thứ tự: admin → <b>RBAC</b> · owner → <b>DAC</b> · còn lại → <b>ABAC</b></span></div>
-  <aside class="xp" data-step="3"><span class="lbl">CHI TIẾT</span><h3>MAC · DAC · RBAC · ABAC</h3><p class="def">Các mô hình khác nhau ở thông tin dùng để quyết định và ở người được phép đặt quyền.</p><ul><li><b>MAC</b>: nhãn bảo mật do quản trị trung tâm đặt; người dùng không đổi được.</li><li><b>DAC</b>: chủ sở hữu tự chia sẻ; linh hoạt nhưng dễ chia nhầm.</li><li><b>RBAC</b>: quyền gắn vào vai trò; đổi người chỉ cần đổi vai trò.</li><li><b>ABAC</b>: kết hợp thuộc tính người, tài nguyên, môi trường; chi tiết nhất, policy phức tạp nhất.</li></ul><div class="xe"><span>TRONG TRUSTMESH</span><code>PolicyEngine</code>: admin → RBAC, owner → DAC, còn lại → ABAC (có thuộc tính <code>network_zone</code>).</div></aside>
+  <div class="card model on a" style="left:1163px;--d:1.4s"><b>ABAC</b><div class="q">DỰA VÀO</div><div class="v">Nhiều thuộc tính</div><div class="ex">teacher + đúng môn + cùng khoa + campus</div><div class="dx" data-step="2">Thuộc tính nằm ở nhiều máy khác nhau</div><span class="badge" data-step="1">④ còn lại</span></div>
+  <div class="tm" data-step="1"><span class="lbl">TRONG TRUSTMESH</span><span><code>evaluate()</code> xét theo thứ tự: admin → <b>RBAC</b> · owner → <b>DAC</b> · nhãn thấp → <b>MAC</b> · còn lại → <b>ABAC</b> · không khớp → fail-safe</span></div>
+  <aside class="xp" data-step="3"><span class="lbl">CHI TIẾT</span><h3>MAC · DAC · RBAC · ABAC</h3><p class="def">Các mô hình khác nhau ở thông tin dùng để quyết định và ở người được phép đặt quyền.</p><ul><li><b>MAC</b>: nhãn bảo mật do quản trị trung tâm đặt; người dùng không đổi được.</li><li><b>DAC</b>: chủ sở hữu tự chia sẻ; linh hoạt nhưng dễ chia nhầm.</li><li><b>RBAC</b>: quyền gắn vào vai trò; đổi người chỉ cần đổi vai trò.</li><li><b>ABAC</b>: kết hợp thuộc tính người, tài nguyên, môi trường; chi tiết nhất, policy phức tạp nhất.</li></ul><div class="xe"><span>TRONG TRUSTMESH</span><code>evaluate()</code>: admin → RBAC, owner → DAC, clearance &lt; classification → MAC, còn lại → ABAC (có thuộc tính môi trường <code>zone</code>), không khớp → fail-safe.</div></aside>
 </section>
 
 <!-- ============ 9. ABAC ============ -->
 <section class="slide" data-sec="auth" data-spk="2" data-time="1:00"
-  data-notes="Chuỗi lý do lấy nguyên văn từ code, đúng như dashboard sẽ hiện lúc demo. (Click: quyết định được tính tại chỗ trên node nhận request, không hỏi node khác, nên tắt node B thì node A vẫn quyết định được. Phần demo sẽ chứng minh.)">
+  data-notes="Chuỗi lý do lấy nguyên văn từ code, đúng như dashboard hiện ở màn 1 của demo. (Click: quyết định được tính tại chỗ trên node nhận request, không hỏi node khác, nên tắt node B thì node A vẫn quyết định được. Phần partial failure của demo sẽ chứng minh.)">
   <div class="hdr"><div class="kicker">9.5.1 · ABAC</div><span class="dt"><i>3</i>LỖI CỤC BỘ</span>
     <h2 class="t">Cùng một bảng điểm, <em>hai kết quả khác nhau.</em></h2></div>
   <div class="card side a" style="left:110px;--d:.8s">
     <div class="who" style="position:static"><div class="av" style="--c:var(--alice)">A</div><b>Alice</b></div>
-    <div style="margin-top:14px"><span class="chip">teacher</span><span class="chip">cs</span><span class="chip">confidential</span><span class="chip">campus</span></div>
-    <div class="req">read · grades-ds-2026</div>
-    <div class="why a" style="--d:2.6s">“teacher đúng course được đọc/ghi”</div>
+    <div style="margin-top:14px"><span class="chip">teacher</span><span class="chip">cs</span><span class="chip">restricted</span><span class="chip">campus</span></div>
+    <div class="req">read · grades-ds</div>
+    <div class="why a" style="--d:2.6s">“teacher cs, dạy ds, zone campus”</div>
     <div class="stamp" style="right:40px;top:40px;color:var(--ok);--d:1.9s">ALLOW</div></div>
   <div class="card side a" style="left:840px;--d:1s">
     <div class="who" style="position:static"><div class="av" style="--c:var(--mallory)">M</div><b>Mallory</b></div>
     <div style="margin-top:14px"><span class="chip">guest</span><span class="chip">public</span></div>
-    <div class="req">read · grades-ds-2026</div>
-    <div class="why a" style="--d:3.4s">“clearance thấp hơn classification”</div>
+    <div class="req">read · grades-ds</div>
+    <div class="why a" style="--d:3.4s">“nhãn public &lt; confidential”</div>
     <div class="stamp" style="right:40px;top:40px;color:var(--bad);--d:2.8s">DENY</div></div>
   <div class="tm" data-step="1"><span class="lbl">TRONG TRUSTMESH</span><span>Quyết định tính <b>tại chỗ</b> trên node nhận request, không hỏi node khác → node B chết thì node A vẫn quyết định được.</span></div>
-  <aside class="xp" data-step="2"><span class="lbl">CHI TIẾT</span><h3>Thuộc tính quyết định</h3><p class="def">ABAC đánh giá luật trên nhiều thuộc tính cùng lúc: của người yêu cầu, của tài nguyên và của môi trường (giờ, vùng mạng).</p><ul><li><b>Alice</b>: teacher, đúng course, clearance confidential, ở campus → ALLOW.</li><li><b>Mallory</b>: guest, clearance public thấp hơn classification → DENY.</li><li>Lý do quyết định được ghi lại để giải thích và audit.</li><li><b>Phân tán</b>: nguồn thuộc tính có thể ở máy khác, có thể phải hỏi qua mạng.</li></ul><div class="xe"><span>TRONG TRUSTMESH</span>Quyết định tính tại chỗ trên node nhận request; node B chết thì A vẫn quyết định được.</div></aside>
+  <aside class="xp" data-step="2"><span class="lbl">CHI TIẾT</span><h3>Thuộc tính quyết định</h3><p class="def">ABAC đánh giá luật trên nhiều thuộc tính cùng lúc: của người yêu cầu, của tài nguyên và của môi trường (giờ, vùng mạng).</p><ul><li><b>Alice</b>: teacher khoa cs, dạy ds, ở campus → ALLOW.</li><li><b>Mallory</b>: guest, nhãn public &lt; confidential → DENY (luật MAC chặn trước ABAC).</li><li><b>Môi trường</b>: Alice đọc đề thi <code>exam-ds</code> từ mạng public → DENY.</li><li>Lý do quyết định được ghi lại để giải thích và audit.</li><li><b>Phân tán</b>: nguồn thuộc tính có thể ở máy khác, có thể phải hỏi qua mạng.</li></ul><div class="xe"><span>TRONG TRUSTMESH</span>Quyết định tính tại chỗ trên node nhận request; node B chết thì A vẫn quyết định được.</div></aside>
 </section>
 
 <!-- ============ 10. ACL / CAPABILITY ============ -->
@@ -992,14 +987,14 @@ code{font:500 .86em var(--mono);color:var(--ac2);background:color-mix(in srgb,va
   <div class="abs" data-step="1" style="left:330px;top:680px;font:700 22px var(--sans);color:#a6f5c8">↑ cột = <b>ACL</b> · object giữ danh sách</div>
   <div class="abs" data-step="2" style="left:330px;top:720px;font:700 22px var(--sans);color:#cdb6ff">→ hàng = <b>Capability</b> · subject mang token</div>
   <div class="cap" data-step="2"><span class="lbl" style="color:#cdb6ff">CAPABILITY CỦA BOB</span><br>
-    <span class="k">subject</span>: bob<br><span class="k">resource</span>: grades-ds-2026<br><span class="k">actions</span>: [read]<br><span class="k">expires_at</span>: 2026-10-07T10:00Z
-    <div class="csig">✓ signature Ed25519</div></div>
+    <span class="k">issuer</span>: alice · <span class="k">subject</span>: bob<br><span class="k">resource</span>: grades-ds<br><span class="k">actions</span>: [read]<br><span class="k">expires</span>: now + 300 s<br><span class="k">node</span>: node-a
+    <div class="csig">✓ chữ ký Ed25519 của node-a</div></div>
   <aside class="xp" data-step="3"><span class="lbl">CHI TIẾT</span><h3>Hai cách lưu ma trận quyền</h3><p class="def">Access control matrix: hàng là subject, cột là object, mỗi ô là quyền. Ma trận thật rất thưa nên được lưu theo một trong hai chiều.</p><ul><li><b>ACL</b>: mỗi object giữ danh sách ai được làm gì (cắt theo cột).</li><li><b>Capability</b>: mỗi subject giữ vé ghi quyền của mình (cắt theo hàng).</li><li>ACL cần biết chắc người gửi là ai; capability chỉ cần kiểm vé thật hay giả.</li><li>Vé phải chống làm giả: được bên cấp ký số.</li></ul><div class="xe"><span>DỄ HÌNH DUNG</span>ACL = danh sách khách mời dán ở cửa; capability = vé vào cửa khách cầm theo.</div></aside>
 </section>
 
 <!-- ============ 10b. CAPABILITY TRONG HỆ PHÂN TÁN ============ -->
 <section class="slide" data-sec="auth" data-spk="2" data-time="0:50"
-  data-notes="Ví dụ: node A cấp vé cho Bob rồi bị tắt. Bob mang vé tới node C; C chỉ cần khóa công khai để kiểm chữ ký, không cần gọi A. Với ACL, object có nhiều bản sao thì phải đồng bộ danh sách tới mọi bản. (Click 1: cái giá: thu hồi khó vì vé đã phát ra; hạn dùng phụ thuộc đồng hồ của node kiểm.) (Click 2: TrustMesh cho vé sống 5 phút, tức là hết hạn nhanh thay cho thu hồi.)">
+  data-notes="Ví dụ: node A cấp vé cho Bob rồi bị tắt. Bob mang vé tới node C; C chỉ cần khóa công khai để kiểm chữ ký, không cần gọi A. Với ACL, object có nhiều bản sao thì phải đồng bộ danh sách tới mọi bản. (Click 1: cái giá: thu hồi khó vì vé đã phát ra; hạn dùng phụ thuộc đồng hồ của node kiểm.) (Click 2: TrustMesh cho vé sống ngắn, vé gốc của Bob 10 phút, vé ủy cho Carol 5 phút, tức là hết hạn nhanh thay cho thu hồi. Màn 2: vé do node-a ký, node-b và node-c tự kiểm, không node nào gọi lại A. Màn 3: vé Mallory sửa rồi ký giả, hoặc tự ký bằng khóa riêng, đều bị từ chối vì node chỉ tin khóa trong keyring của cluster.)">
   <div class="hdr"><div class="kicker">9.5.2 · CAPABILITY TRONG HỆ PHÂN TÁN</div><span class="dt"><i>3</i>LỖI CỤC BỘ</span><span class="dt"><i>4</i>KHÔNG ĐỒNG HỒ CHUNG</span>
     <h2 class="t">Vé dùng được ở mọi node, <em>nhưng khó thu hồi.</em></h2></div>
   <svg class="viz" viewBox="0 0 1600 900">
@@ -1022,13 +1017,13 @@ code{font:500 .86em var(--mono);color:var(--ac2);background:color-mix(in srgb,va
     <tr data-step="1"><td>Thu hồi quyền</td><td class="g">✓ Xóa khỏi danh sách</td><td class="r">✗ Vé đã phát ra</td></tr>
     <tr data-step="1"><td>Hạn dùng</td><td>Không cần</td><td class="r">✗ Theo đồng hồ node kiểm</td></tr>
   </table>
-  <div class="tm" data-step="2"><span class="lbl">TRONG TRUSTMESH</span><span>Vé của Bob sống <b>5 phút</b>: hết hạn nhanh thay cho thu hồi. Node nào cũng kiểm được chữ ký mà không gọi node cấp.</span></div>
-  <aside class="xp" data-step="3"><span class="lbl">CHI TIẾT</span><h3>Capability: lợi và giá</h3><p class="def">Capability hợp hệ phân tán vì server tự kiểm vé, không cần hỏi trung tâm, kể cả khi bên cấp đang offline.</p><ul><li><b>Lợi</b>: không cần đồng bộ ACL tới mọi bản sao.</li><li><b>Giá 1, thu hồi</b>: vé đã phát ra thì khó rút lại.</li><li><b>Giá 2, hạn dùng</b>: phụ thuộc đồng hồ của node kiểm tra.</li><li><b>Cách làm phổ biến</b>: vé sống ngắn, cấp lại thường xuyên.</li></ul><div class="xe"><span>TRONG TRUSTMESH</span>Vé của Bob sống 5 phút. Nên biết: <code>verify()</code> đang lấy khóa ngay trong vé, chưa so với danh sách khóa node đã biết.</div></aside>
+  <div class="tm" data-step="2"><span class="lbl">TRONG TRUSTMESH</span><span>Vé sống ngắn (<b>10 phút</b>, vé ủy <b>5 phút</b>): hết hạn nhanh thay cho thu hồi. B và C kiểm chữ ký bằng khóa của A <b>đã ghim</b>, không gọi lại A.</span></div>
+  <aside class="xp" data-step="3"><span class="lbl">CHI TIẾT</span><h3>Capability: lợi và giá</h3><p class="def">Capability hợp hệ phân tán vì server tự kiểm vé, không cần hỏi trung tâm, kể cả khi bên cấp đang offline.</p><ul><li><b>Lợi</b>: không cần đồng bộ ACL tới mọi bản sao.</li><li><b>Giá 1, thu hồi</b>: vé đã phát ra thì khó rút lại.</li><li><b>Giá 2, hạn dùng</b>: phụ thuộc đồng hồ của node kiểm tra.</li><li><b>Cách làm phổ biến</b>: vé sống ngắn, cấp lại thường xuyên.</li></ul><div class="xe"><span>TRONG TRUSTMESH</span>Vé của Bob sống 10 phút, vé ủy cho Carol 5 phút. <code>check()</code> lấy khóa từ keyring (trust anchor), không từ vé: vé ký giả hoặc ký bằng khóa ngoài cluster đều bị từ chối.</div></aside>
 </section>
 
 <!-- ============ 11. DELEGATION ============ -->
 <section class="slide" data-sec="auth" data-spk="2" data-time="1:00"
-  data-notes="Alice nhờ Bob: giấy ủy quyền chỉ ghi quyền đọc, hạn 5 phút. Bob không thể tự thêm quyền ghi, giấy của Bob không sống lâu hơn giấy gốc. Trong hệ phân tán chuỗi này đi qua nhiều bên, nhiều máy; người kiểm ở cuối chuỗi phải tin được cả chuỗi mà không gọi lại từng người. Hai slide sau là hai cách làm trong sách: OAuth và WAVE.">
+  data-notes="Alice nhờ Bob: giấy ủy quyền chỉ ghi quyền đọc, hạn 5 phút. Bob không thể tự thêm quyền ghi, giấy của Bob không sống lâu hơn giấy gốc. Trong hệ phân tán chuỗi này đi qua nhiều bên, nhiều máy; người kiểm ở cuối chuỗi phải tin được cả chuỗi mà không gọi lại từng người. Màn 2 của demo: node-a ký vé Alice cấp Bob [read, write]; Bob mang sang node-b ủy Carol [read]; Bob thêm delete bị chặn; Carol đọc ở node-c được, ghi thì không. Hai slide sau là hai cách làm trong sách: OAuth và WAVE.">
   <div class="hdr"><div class="kicker">9.5.3 · DELEGATION</div><span class="dt"><i>5</i>NHIỀU TỔ CHỨC</span>
     <h2 class="t">Ủy quyền chỉ được <em>giữ nguyên hoặc thu hẹp.</em></h2></div>
   <svg class="viz" viewBox="0 0 1600 900">
@@ -1043,8 +1038,8 @@ code{font:500 .86em var(--mono);color:var(--ac2);background:color-mix(in srgb,va
   <div class="card dl a" style="left:1025px;width:345px;--d:1.8s"><b>Bên thứ ba</b><span class="chip">read</span><div class="scope" style="width:52%;--d:2.1s"></div></div>
   <div class="ghost a" style="left:1310px;top:600px;--d:2.9s;--d2:3.3s">+ write</div>
   <div class="tm" style="--d:3.6s"><span class="lbl">TRONG TRUSTMESH</span>
-    <span><code>delegate()</code>: actions ⊆ actions cha · <code>expires_at = min(ttl mới, hạn cha)</code> · <code>parent_hash</code> nối về cha</span></div>
-  <aside class="xp" data-step="1"><span class="lbl">CHI TIẾT</span><h3>Delegation</h3><p class="def">Delegation cho một bên hành động thay bên khác với một phần quyền, không cần chia sẻ mật khẩu hay khóa bí mật.</p><ul><li><b>Thu hẹp</b>: quyền con ⊆ quyền cha.</li><li><b>Hạn dùng</b> của vé con không vượt hạn vé cha.</li><li><b>Kiểm cả chuỗi</b>: người kiểm cuối chuỗi phải tin được mọi mắt xích mà không gọi lại từng người.</li><li>Hai ví dụ trong sách: OAuth và WAVE (hai slide sau).</li></ul><div class="xe"><span>TRONG TRUSTMESH</span><code>delegate()</code>: actions ⊆ actions cha, <code>expires_at = min(ttl mới, hạn cha)</code>, <code>parent_hash</code> nối về vé cha.</div></aside>
+    <span><code>delegate()</code>: actions ⊆ actions cha · <code>expires = min(now + ttl, hạn cha)</code> · cần <code>may_delegate</code> · <code>parent</code> = hash vé cha</span></div>
+  <aside class="xp" data-step="1"><span class="lbl">CHI TIẾT</span><h3>Delegation</h3><p class="def">Delegation cho một bên hành động thay bên khác với một phần quyền, không cần chia sẻ mật khẩu hay khóa bí mật.</p><ul><li><b>Thu hẹp</b>: quyền con ⊆ quyền cha.</li><li><b>Hạn dùng</b> của vé con không vượt hạn vé cha.</li><li><b>Kiểm cả chuỗi</b>: người kiểm cuối chuỗi phải tin được mọi mắt xích mà không gọi lại từng người.</li><li>Hai ví dụ trong sách: OAuth và WAVE (hai slide sau).</li></ul><div class="xe"><span>TRONG TRUSTMESH</span><code>delegate()</code>: actions ⊆ actions cha, <code>expires = min(now + ttl, hạn cha)</code>, vé cha phải có <code>may_delegate</code>, <code>parent</code> = hash vé cha.</div></aside>
 </section>
 
 <!-- ============ 11a. OAUTH ============ -->
@@ -1063,7 +1058,7 @@ code{font:500 .86em var(--mono);color:var(--ac2);background:color-mix(in srgb,va
   <div class="card ob a" style="left:110px;top:320px;--d:.8s"><span class="lbl">RESOURCE OWNER</span><h4>Alice</h4><p>Người có quyền</p></div>
   <div class="card ob glow a" style="left:610px;top:320px;--d:.9s"><span class="lbl">AUTHORIZATION SERVER</span><h4>Nơi đăng nhập</h4><p>Cấp access token</p></div>
   <div class="card ob a" style="left:110px;top:555px;--d:1s"><span class="lbl">CLIENT</span><h4>Ứng dụng nhập điểm</h4><p>Hành động thay Alice</p></div>
-  <div class="card ob a" style="left:610px;top:555px;--d:1.1s"><span class="lbl">RESOURCE SERVER</span><h4>Giữ <code>grades-ds-2026</code></h4><p>Tự kiểm token</p></div>
+  <div class="card ob a" style="left:610px;top:555px;--d:1.1s"><span class="lbl">RESOURCE SERVER</span><h4>Giữ <code>grades-ds</code></h4><p>Tự kiểm token</p></div>
   <div class="nb a-pop" style="left:470px;top:521px;--d:1.8s">1</div>
   <div class="nb a-pop" style="left:509px;top:380px;--d:2s">2</div>
   <div class="nb a-pop" style="left:548px;top:477px;--d:2.2s">3</div>
@@ -1080,7 +1075,7 @@ code{font:500 .86em var(--mono);color:var(--ac2);background:color-mix(in srgb,va
 
 <!-- ============ 11b. WAVE ============ -->
 <section class="slide" data-sec="auth" data-spk="2" data-time="0:40"
-  data-notes="OAuth vẫn cần authorization server. WAVE bỏ luôn máy chủ trung tâm: mỗi lần cấp quyền là một attestation có chữ ký, lưu ở kho chung chỉ ghi thêm. (Click 1: muốn chứng minh có quyền thì đưa ra một đường đi từ chủ tài nguyên tới mình; quyền thu hẹp dần dọc đường; người cấp không cần online lúc quyền được dùng.) (Click 2: TrustMesh có parent_hash nối vé con về vé cha, một chuỗi thu nhỏ, nhưng chưa có kho chung.) Có thể bỏ slide này nếu thiếu giờ.">
+  data-notes="OAuth vẫn cần authorization server. WAVE bỏ luôn máy chủ trung tâm: mỗi lần cấp quyền là một attestation có chữ ký, lưu ở kho chung chỉ ghi thêm. (Click 1: muốn chứng minh có quyền thì đưa ra một đường đi từ chủ tài nguyên tới mình; quyền thu hẹp dần dọc đường; người cấp không cần online lúc quyền được dùng.) (Click 2: TrustMesh có trường parent, là hash của vé cha, nối vé con về vé cha: một chuỗi thu nhỏ, nhưng chưa có kho chung. Màn 2 vẽ chuỗi này ở bên phải dashboard.) Có thể bỏ slide này nếu thiếu giờ.">
   <div class="hdr"><div class="kicker">9.5 · WAVE</div><span class="dt"><i>1</i>KHÔNG TRUNG TÂM</span><span class="dt"><i>3</i>LỖI CỤC BỘ</span>
     <h2 class="t">WAVE: ủy quyền <em>không cần máy chủ trung tâm.</em></h2></div>
   <svg class="viz" viewBox="0 0 1600 900">
@@ -1104,13 +1099,13 @@ code{font:500 .86em var(--mono);color:var(--ac2);background:color-mix(in srgb,va
   <div class="abs a" style="left:985px;top:318px;width:200px;text-align:center;--d:2.2s"><span class="chip">read</span></div>
   <div class="logbar a" style="--d:2.4s">KHO ATTESTATION CHUNG · CHỈ GHI THÊM</div>
   <div class="abs" data-step="1" style="left:110px;top:615px;right:110px;text-align:center"><span class="chip">Mỗi cạnh = attestation có chữ ký</span><span class="chip">Proof = một đường đi từ chủ tới mình</span><span class="chip">Người cấp không cần online</span></div>
-  <div class="tm" data-step="2"><span class="lbl">TRONG TRUSTMESH</span><span><code>parent_hash</code> nối vé con về vé cha: một chuỗi attestation thu nhỏ, nhưng chưa có kho chung.</span></div>
-  <aside class="xp" data-step="3"><span class="lbl">CHI TIẾT</span><h3>WAVE</h3><p class="def">Hệ ủy quyền phi tập trung: mỗi lần cấp quyền là một attestation có chữ ký, lưu trong kho chung chỉ ghi thêm.</p><ul><li>Chứng minh quyền = đưa ra <b>một đường đi</b> trong đồ thị attestation từ chủ tài nguyên đến mình.</li><li>Quyền thu hẹp dần dọc đường đi.</li><li>Người cấp quyền <b>không cần online</b> khi người nhận dùng quyền.</li><li>Không có máy chủ trung tâm ra quyết định.</li></ul><div class="xe"><span>TRONG TRUSTMESH</span><code>parent_hash</code> nối vé con về vé cha: một chuỗi attestation tuyến tính, chưa phải đồ thị.</div></aside>
+  <div class="tm" data-step="2"><span class="lbl">TRONG TRUSTMESH</span><span><code>parent</code> (hash vé cha) nối vé con về vé cha: một chuỗi attestation thu nhỏ, nhưng chưa có kho chung.</span></div>
+  <aside class="xp" data-step="3"><span class="lbl">CHI TIẾT</span><h3>WAVE</h3><p class="def">Hệ ủy quyền phi tập trung: mỗi lần cấp quyền là một attestation có chữ ký, lưu trong kho chung chỉ ghi thêm.</p><ul><li>Chứng minh quyền = đưa ra <b>một đường đi</b> trong đồ thị attestation từ chủ tài nguyên đến mình.</li><li>Quyền thu hẹp dần dọc đường đi.</li><li>Người cấp quyền <b>không cần online</b> khi người nhận dùng quyền.</li><li>Không có máy chủ trung tâm ra quyết định.</li></ul><div class="xe"><span>TRONG TRUSTMESH</span><code>parent</code> (hash vé cha) nối vé con về vé cha: một chuỗi attestation tuyến tính, chưa phải đồ thị.</div></aside>
 </section>
 
 <!-- ============ 12. FIREWALL ============ -->
 <section class="slide" data-sec="mon" data-spk="2" data-time="0:50" data-sweep="9.6 · MONITORING"
-  data-notes="Firewall là tường rào và cổng bảo vệ của khu nhà. (Click 1: ba kiểu: packet filter chỉ xem phong bì, application gateway mở thư đọc nội dung, proxy nói chuyện thay hai bên; TrustMesh là application gateway.) (Click 2: Mallory dùng tài khoản hợp lệ bị đánh cắp thì đi xuyên qua.) (Click 3: hệ phân tán không có một biên duy nhất, node nằm ở nhiều mạng, nên mỗi node tự có gateway. Bộ đếm rate limit của TrustMesh riêng từng node: rải request lên 3 node được 240 request mỗi 10 giây. Đó là bài toán rate limiting phân tán.)">
+  data-notes="Firewall là tường rào và cổng bảo vệ của khu nhà. (Click 1: ba kiểu: packet filter chỉ xem phong bì, application gateway mở thư đọc nội dung, proxy nói chuyện thay hai bên; TrustMesh là application gateway.) (Click 2: Mallory dùng tài khoản hợp lệ bị đánh cắp thì đi xuyên qua.) (Click 3: hệ phân tán không có một biên duy nhất, node nằm ở nhiều mạng, nên mỗi node tự có gateway. Bộ đếm rate limit của TrustMesh riêng từng node, nên rải request lên nhiều node thì mỗi node đều thấy dưới ngưỡng. Đó là bài toán rate limiting phân tán. Firewall không có trong demo, chỉ nói trên slide.)">
   <div class="hdr"><div class="kicker">9.6.1 · FIREWALL</div><span class="dt"><i>1</i>KHÔNG TRUNG TÂM</span>
     <h2 class="t">Firewall lọc lưu lượng, <em>không thay được authorization.</em></h2></div>
   <div class="zone a" style="left:300px;--d:.8s">OUTSIDE</div>
@@ -1125,13 +1120,13 @@ code{font:500 .86em var(--mono);color:var(--ac2);background:color-mix(in srgb,va
   <div class="warn" data-step="3" style="left:110px;top:352px;width:600px">Hệ phân tán không có một biên duy nhất → mỗi node tự có gateway, bộ đếm riêng.</div>
   <div class="thief" data-step="2"><div class="av" style="--c:var(--mallory)">M</div><span class="key">🔑 tài khoản bị đánh cắp</span></div>
   <div class="tm" style="--d:2s"><span class="lbl">TRONG TRUSTMESH</span>
-    <span class="chip">payload &gt; 64 KB → <code>413</code></span><span class="chip">&gt; 80 request / 10 giây → <code>429</code></span><span class="chip">Trusted host + CORS</span><span class="chip">mỗi node một gateway</span></div>
-  <aside class="xp" data-step="4"><span class="lbl">CHI TIẾT</span><h3>Firewall</h3><p class="def">Firewall kiểm soát lưu lượng đi qua biên mạng theo luật; nó không biết ai được làm gì với tài nguyên bên trong.</p><ul><li><b>Packet filter</b>: xét địa chỉ, cổng, giao thức của gói.</li><li><b>Application gateway</b>: đọc nội dung theo giao thức (HTTP…).</li><li><b>Proxy</b>: đứng giữa, hai bên không nói chuyện trực tiếp.</li><li><b>Giới hạn</b>: tài khoản hợp lệ bị đánh cắp vẫn đi qua; hệ phân tán không có một biên duy nhất.</li></ul><div class="xe"><span>TRONG TRUSTMESH</span>Gateway ở mỗi node: quá 64 KB → 413, quá 80 request/10 giây → 429. Bộ đếm riêng từng node nên rải lên 3 node được 240 request.</div></aside>
+    <span class="chip">payload &gt; 64 KB → <code>413</code></span><span class="chip">&gt; 60 request / 10 giây → <code>429</code></span><span class="chip">Trusted host + header CSP</span><span class="chip">mỗi node một gateway</span></div>
+  <aside class="xp" data-step="4"><span class="lbl">CHI TIẾT</span><h3>Firewall</h3><p class="def">Firewall kiểm soát lưu lượng đi qua biên mạng theo luật; nó không biết ai được làm gì với tài nguyên bên trong.</p><ul><li><b>Packet filter</b>: xét địa chỉ, cổng, giao thức của gói.</li><li><b>Application gateway</b>: đọc nội dung theo giao thức (HTTP…).</li><li><b>Proxy</b>: đứng giữa, hai bên không nói chuyện trực tiếp.</li><li><b>Giới hạn</b>: tài khoản hợp lệ bị đánh cắp vẫn đi qua; hệ phân tán không có một biên duy nhất.</li></ul><div class="xe"><span>TRONG TRUSTMESH</span>Gateway ở mỗi node: quá 64 KB → 413, quá 60 request/10 giây → 429. Bộ đếm riêng từng node nên rải request lên nhiều node thì lọt. Không có trong demo.</div></aside>
 </section>
 
 <!-- ============ 13. SIDS / AIDS ============ -->
 <section class="slide" data-sec="mon" data-spk="2" data-time="0:50"
-  data-notes="SIDS như danh sách ảnh truy nã: khớp mặt là bắt, kẻ mới thì chịu. AIDS như bảo vệ quen mặt cư dân: thấy ai lạ là báo, nhưng hay báo nhầm. (Click 1: sensor đặt ở đâu: NIDS nghe trên mạng, HIDS chạy trên từng máy; TrustMesh mỗi node một sensor.) (Click 2: hai luật của TrustMesh là luật ngưỡng, gần SIDS hơn; AIDS thật cần mô hình hành vi.) (Click 3: tấn công rải đều lên 3 node, mỗi node chỉ thấy 1 đến 2 lần, không node nào chạm ngưỡng. Mỗi node chỉ thấy một mảnh, đó là lý do cần slide sau.)">
+  data-notes="SIDS như danh sách ảnh truy nã: khớp mặt là bắt, kẻ mới thì chịu. AIDS như bảo vệ quen mặt cư dân: thấy ai lạ là báo, nhưng hay báo nhầm. (Click 1: sensor đặt ở đâu: NIDS nghe trên mạng, HIDS chạy trên từng máy; TrustMesh mỗi node một sensor.) (Click 2: TrustMesh có cả hai: SIDS khớp mẫu path traversal, SQL injection, XSS trong đường dẫn; AIDS ở đây chỉ là luật ngưỡng 3 lần bị từ chối trong 30 giây, AIDS thật cần mô hình hành vi. Màn 3 có cả hai: Mallory dò ../../etc/passwd ở node-b thì SIDS bắn; 3 lần bị từ chối ở node-c thì AIDS bắn.) (Click 3: dò chậm rải đều lên 3 node, mỗi node chỉ thấy 2 lần, không node nào chạm ngưỡng, đây là ô FN. Mỗi node chỉ thấy một mảnh, đó là lý do cần slide sau.)">
   <div class="hdr"><div class="kicker">9.6.2 · INTRUSION DETECTION</div><span class="dt"><i>1</i>KHÔNG TRUNG TÂM</span><span class="dt"><i>4</i>KHÔNG ĐỒNG HỒ CHUNG</span>
     <h2 class="t">SIDS nhận ra mẫu đã biết, <em>AIDS phát hiện điều bất thường.</em></h2></div>
   <div class="card cmp a" style="left:110px;--d:.8s"><b>SIDS<small>signature</small></b>
@@ -1140,16 +1135,16 @@ code{font:500 .86em var(--mono);color:var(--ac2);background:color-mix(in srgb,va
     <div class="row"><i class="y">✓</i>Học hành vi bình thường</div><div class="row"><i class="y">✓</i>Bắt được kiểu tấn công mới</div><div class="row"><i class="n">✗</i>Nhiều cảnh báo nhầm</div></div>
   <div class="vs a-pop" style="--d:1.4s">VS</div>
   <div class="abs t13a" data-step="1" style="left:110px;top:636px;right:110px;display:flex;gap:8px;align-items:center"><span class="lbl" style="margin-right:10px">ĐẶT SENSOR Ở ĐÂU</span><span class="chip"><b>NIDS</b> · nghe trên mạng</span><span class="chip"><b>HIDS</b> · chạy trên từng máy ← mỗi node TrustMesh</span></div>
-  <div class="warn t13b" data-step="2" style="left:110px;top:640px;right:110px">Cả hai luật của TrustMesh là luật ngưỡng → gần SIDS hơn. AIDS thật cần một mô hình hành vi.</div>
-  <div class="warn t13c" data-step="3" style="left:110px;top:640px;right:110px">Tấn công rải đều lên 3 node: mỗi node thấy 1–2 lần, không node nào chạm ngưỡng 3 → mỗi node chỉ thấy một mảnh.</div>
+  <div class="warn t13b" data-step="2" style="left:110px;top:640px;right:110px">TrustMesh: SIDS khớp mẫu <code>../</code>, <code>' or 1=1</code>, <code>&lt;script</code>. AIDS chỉ là luật ngưỡng; AIDS thật cần mô hình hành vi.</div>
+  <div class="warn t13c" data-step="3" style="left:110px;top:640px;right:110px">Dò chậm rải đều lên 3 node: mỗi node thấy 2 lần, không node nào chạm ngưỡng 3 → mỗi node chỉ thấy một mảnh.</div>
   <div class="tm" style="--d:2s"><span class="lbl">TRONG TRUSTMESH</span>
-    <span>Cửa sổ 30 giây: ≥ 3 lần bị từ chối cùng nguồn → <code>denied_access_burst</code> · ≥ 4 tên <code>sybil-*</code> → <code>sybil_identity_burst</code></span></div>
-  <aside class="xp" data-step="4"><span class="lbl">CHI TIẾT</span><h3>Intrusion detection</h3><p class="def">IDS quan sát hệ thống để phát hiện hành vi tấn công đã lọt qua các lớp bảo vệ khác.</p><ul><li><b>SIDS</b>: so với chữ ký tấn công đã biết; ít báo nhầm, mù với zero-day.</li><li><b>AIDS</b>: học hành vi bình thường, báo khi lệch; bắt được cái mới, nhiều báo nhầm.</li><li><b>NIDS</b> nghe trên mạng, <b>HIDS</b> chạy trên từng máy.</li><li><b>Phân tán</b>: tấn công rải trên nhiều node thì mỗi node chỉ thấy một mảnh.</li></ul><div class="xe"><span>TRONG TRUSTMESH</span>Hai luật ngưỡng trong 30 giây: ≥ 3 lần bị từ chối cùng nguồn, ≥ 4 tên <code>sybil-*</code>. Gần SIDS hơn.</div></aside>
+    <span><b>SIDS</b>: mẫu trong đường dẫn (path traversal, SQL injection, XSS) · <b>AIDS</b>: ≥ 3 lần bị từ chối cùng nguồn trong 30 giây</span></div>
+  <aside class="xp" data-step="4"><span class="lbl">CHI TIẾT</span><h3>Intrusion detection</h3><p class="def">IDS quan sát hệ thống để phát hiện hành vi tấn công đã lọt qua các lớp bảo vệ khác.</p><ul><li><b>SIDS</b>: so với chữ ký tấn công đã biết; ít báo nhầm, mù với zero-day.</li><li><b>AIDS</b>: học hành vi bình thường, báo khi lệch; bắt được cái mới, nhiều báo nhầm.</li><li><b>NIDS</b> nghe trên mạng, <b>HIDS</b> chạy trên từng máy.</li><li><b>Phân tán</b>: tấn công rải trên nhiều node thì mỗi node chỉ thấy một mảnh.</li></ul><div class="xe"><span>TRONG TRUSTMESH</span>SIDS khớp 3 mẫu trong đường dẫn; AIDS là luật ngưỡng ≥ 3 lần bị từ chối cùng nguồn trong 30 giây. Mỗi cảnh báo được ký trước khi gửi peer.</div></aside>
 </section>
 
 <!-- ============ 14. CIDS ============ -->
 <section class="slide" data-sec="mon" data-spk="2" data-time="1:00"
-  data-notes="Camera ở một cổng thấy một người lạ đi qua thì chưa đáng ngại; camera ở 2–3 cổng cùng thấy người đó thử cửa thì đó là đột nhập. Centralized thường chính xác hơn nhưng dễ nghẽn; distributed mở rộng tốt hơn và không có điểm lỗi đơn. (Click: chuyển sang TrustMesh — 5 request bị từ chối từ 203.0.113.77, cảnh báo ký Ed25519, incident khi có 2 reporter.)">
+  data-notes="Camera ở một cổng thấy một người lạ đi qua thì chưa đáng ngại; camera ở 2–3 cổng cùng thấy người đó thử cửa thì đó là đột nhập. Centralized thường chính xác hơn nhưng dễ nghẽn; distributed mở rộng tốt hơn và không có điểm lỗi đơn. (Click: chuyển sang TrustMesh. Màn 1: Mallory 203.0.113.77 bị từ chối 3 lần ở node-a, sensor A ký cảnh báo AIDS gửi B và C, nhưng mới 1 reporter nên chưa thành incident. Màn 3: node-c rồi node-b cũng bắn, đủ 2 reporter là thành incident; cuối màn cả 3 node cùng xác nhận.)">
   <div class="hdr"><div class="kicker">9.6.3 · COLLABORATIVE IDS</div><span class="dt"><i>1</i>KHÔNG TRUNG TÂM</span><span class="dt"><i>3</i>LỖI CỤC BỘ</span>
     <h2 class="t">Một sensor nhìn một góc; <em>nhiều sensor ghép lại mới thấy toàn cảnh.</em></h2></div>
   <div class="l1">
@@ -1172,19 +1167,19 @@ code{font:500 .86em var(--mono);color:var(--ac2);background:color-mix(in srgb,va
       <path class="ln d1" pathLength="1" style="--d:2.6s" d="M1060 385 L1170 470"/>
     </svg>
     <div class="ip b1" style="--d:.2s">203.0.113.77</div>
-    <div class="abs b1" style="left:430px;top:540px;font:600 16px var(--sans);color:#ff8fa3;--d:.9s">5 request bị từ chối</div>
+    <div class="abs b1" style="left:430px;top:540px;font:600 16px var(--sans);color:#ff8fa3;--d:.9s">3 lần bị từ chối / node</div>
     <div class="orbn b1" style="left:625px;top:495px;--d:.4s">A</div>
     <div class="orbn b1" style="left:1000px;top:385px;--d:1.4s">B</div>
     <div class="orbn b1" style="left:1000px;top:610px;--d:1.5s">C</div>
     <div class="sig b1" style="left:700px;top:380px;--d:1.9s">🔏 alert ký Ed25519</div>
-    <div class="stamp st14" style="left:1160px;top:470px;color:#ffb547;font-size:28px">INCIDENT<br><span style="font-size:17px;letter-spacing:.1em">2 reporters</span></div>
+    <div class="stamp st14" style="left:1160px;top:470px;color:#ffb547;font-size:28px">INCIDENT<br><span style="font-size:17px;letter-spacing:.1em">≥ 2 reporters</span></div>
   </div>
-  <aside class="xp" data-step="2"><span class="lbl">CHI TIẾT</span><h3>Collaborative IDS</h3><p class="def">Nhiều sensor ở nhiều nơi chia sẻ phát hiện để thấy những cuộc tấn công mà một sensor đơn lẻ bỏ sót.</p><ul><li>Sensor gom thành community, mỗi community có một head tổng hợp.</li><li>Các head trao đổi <b>signed detections</b> với nhau.</li><li>Phát hiện được tấn công phối hợp, rải trên nhiều điểm.</li><li>Cảnh báo phải được ký để không bị giả mạo khi đi qua mạng.</li></ul><div class="xe"><span>TRONG TRUSTMESH</span>203.0.113.77 bị từ chối 5 lần → node ký alert Ed25519 gửi node khác → incident khi có 2 reporter.</div></aside>
+  <aside class="xp" data-step="2"><span class="lbl">CHI TIẾT</span><h3>Collaborative IDS</h3><p class="def">Nhiều sensor ở nhiều nơi chia sẻ phát hiện để thấy những cuộc tấn công mà một sensor đơn lẻ bỏ sót.</p><ul><li>Sensor gom thành community, mỗi community có một head tổng hợp.</li><li>Các head trao đổi <b>signed detections</b> với nhau.</li><li>Phát hiện được tấn công phối hợp, rải trên nhiều điểm.</li><li>Cảnh báo phải được ký để không bị giả mạo khi đi qua mạng.</li></ul><div class="xe"><span>TRONG TRUSTMESH</span>Mallory 203.0.113.77 bị từ chối 3 lần ở node-a (màn 1): 1 reporter, chưa thành incident. Node-c, node-b cũng ký alert Ed25519 gửi peer (màn 3) → incident khi đủ 2 reporter.</div></aside>
 </section>
 
 <!-- ============ 14b. CIDS: KIẾN TRÚC VÀ THÁCH THỨC ============ -->
 <section class="slide" data-sec="mon" data-spk="2" data-time="0:50"
-  data-notes="Ba kiến trúc: tập trung thấy hết nhưng nghẽn và là điểm lỗi đơn; phân tán không có điểm lỗi đơn nhưng mỗi node chỉ thấy một phần; phân cấp nằm giữa. (Click: ba thách thức. Một: sensor nói dối, chính là lỗi Byzantine Hùng đã nói ở 9.4; TrustMesh ký cảnh báo và cần 2 reporter khác nhau. Hai: ghép cảnh báo khi không có đồng hồ chung; fingerprint tính theo phút, hai node lệch phút là lệch fingerprint. Ba: riêng tư dữ liệu chia sẻ; TrustMesh chưa xử lý vì dữ liệu là mô phỏng.)">
+  data-notes="Ba kiến trúc: tập trung thấy hết nhưng nghẽn và là điểm lỗi đơn; phân tán không có điểm lỗi đơn nhưng mỗi node chỉ thấy một phần; phân cấp nằm giữa. (Click: ba thách thức. Một: sensor nói dối, chính là lỗi Byzantine Hùng đã nói ở 9.4; TrustMesh ký cảnh báo, chỉ tin khóa đã ghim và cần 2 reporter khác nhau; cảnh báo mạo danh bị /peer/alert trả 400, phần này không có trong demo. Hai: ghép cảnh báo khi không có đồng hồ chung; TrustMesh ghép theo loại và nguồn, dùng thời điểm node nhận trong cửa sổ 10 phút, không dùng đồng hồ của node gửi. Ba: riêng tư dữ liệu chia sẻ; TrustMesh chưa xử lý vì dữ liệu là mô phỏng.)">
   <div class="hdr"><div class="kicker">9.6.3 · CIDS: KIẾN TRÚC VÀ THÁCH THỨC</div><span class="dt"><i>2</i>CHỈ CÓ MESSAGE</span><span class="dt"><i>4</i>KHÔNG ĐỒNG HỒ CHUNG</span>
     <h2 class="t">Ghép nhiều sensor thì phải <em>tin được từng sensor.</em></h2></div>
   <div class="card ar a" style="left:110px;--d:.8s"><h4>Tập trung</h4><p><b style="color:#8ff0b6">Thấy hết, chính xác</b> · nghẽn, điểm lỗi đơn</p></div>
@@ -1234,17 +1229,17 @@ code{font:500 .86em var(--mono);color:var(--ac2);background:color-mix(in srgb,va
     <circle class="hd a-pop" style="--d:1.3s;transform-origin:1325px 395px" cx="1325" cy="395" r="15"/>
   </svg>
   <div class="card ch" data-step="1" style="left:110px"><h4>① Sensor nói dối</h4><p>Node bị chiếm báo giả để vu oan, hoặc im lặng để che kẻ gian. Đây là lỗi <b style="color:#a9d2ff">Byzantine (9.4)</b>.</p>
-    <div class="tmx">TrustMesh: alert ký Ed25519, cần 2 reporter khác nhau.</div></div>
+    <div class="tmx">TrustMesh: alert ký bằng khóa đã ghim, cần 2 reporter. Mạo danh → 400.</div></div>
   <div class="card ch" data-step="1" style="left:580px;transition-delay:.12s"><h4>② Ghép cảnh báo</h4><p>Hai node phải nhận ra “cùng một vụ” khi không có đồng hồ chung.</p>
-    <div class="tmx">TrustMesh: fingerprint = hash(loại, nguồn, phút). Lệch phút → lệch fingerprint.</div></div>
+    <div class="tmx">TrustMesh: ghép theo (loại, nguồn), tính theo lúc <b>node nhận</b>, cửa sổ 10 phút.</div></div>
   <div class="card ch" data-step="1" style="left:1050px;transition-delay:.24s"><h4>③ Riêng tư</h4><p>Chia sẻ cảnh báo có thể lộ dữ liệu nội bộ của từng bên.</p>
     <div class="tmx">TrustMesh: chưa xử lý (dữ liệu mô phỏng).</div></div>
-  <aside class="xp" data-step="2"><span class="lbl">CHI TIẾT</span><h3>Kiến trúc và thách thức</h3><p class="def">Cách ghép sensor quyết định độ chính xác, khả năng mở rộng và điểm lỗi của cả hệ phát hiện.</p><ul><li><b>Tập trung</b>: chính xác nhất, nhưng nghẽn và là điểm lỗi đơn.</li><li><b>Phân tán</b>: mở rộng tốt, mỗi node chỉ có một phần thông tin.</li><li><b>Phân cấp</b>: community và head, cân bằng hai cách trên.</li><li><b>Thách thức</b>: sensor nói dối, ghép cảnh báo khi không có đồng hồ chung, lộ dữ liệu khi chia sẻ.</li></ul><div class="xe"><span>TRONG TRUSTMESH</span>Cùng vụ = cùng hash(loại, nguồn, phút). Hai node thấy lúc 10:00:59 và 10:01:00 sẽ không ghép được.</div></aside>
+  <aside class="xp" data-step="2"><span class="lbl">CHI TIẾT</span><h3>Kiến trúc và thách thức</h3><p class="def">Cách ghép sensor quyết định độ chính xác, khả năng mở rộng và điểm lỗi của cả hệ phát hiện.</p><ul><li><b>Tập trung</b>: chính xác nhất, nhưng nghẽn và là điểm lỗi đơn.</li><li><b>Phân tán</b>: mở rộng tốt, mỗi node chỉ có một phần thông tin.</li><li><b>Phân cấp</b>: community và head, cân bằng hai cách trên.</li><li><b>Thách thức</b>: sensor nói dối, ghép cảnh báo khi không có đồng hồ chung, lộ dữ liệu khi chia sẻ.</li></ul><div class="xe"><span>TRONG TRUSTMESH</span>Cùng vụ = cùng (loại, nguồn), báo cáo đến trong 10 phút tính theo đồng hồ node nhận. Không dùng timestamp của node gửi nên đồng hồ lệch không làm hỏng việc ghép.</div></aside>
 </section>
 
 <!-- ============ 15. ĐO CHẤT LƯỢNG ============ -->
 <section class="slide" data-sec="mon" data-spk="2" data-time="0:50"
-  data-notes="Bốn ô: bắt đúng, báo nhầm, bỏ sót, yên đúng. Muốn giảm FN mà không làm người vận hành ngập trong FP. (Click 1: accuracy và precision.) (Click 2: recall: trong các vụ tấn công thật, bắt được bao nhiêu. Precision trả lời: cảnh báo có đáng tin không; recall trả lời: có bỏ sót không.) TrustMesh: mỗi node tự đo trên dữ liệu nó thấy.">
+  data-notes="Bốn ô: bắt đúng, báo nhầm, bỏ sót, yên đúng. Muốn giảm FN mà không làm người vận hành ngập trong FP. (Click 1: accuracy và precision.) (Click 2: recall: trong các vụ tấn công thật, bắt được bao nhiêu. Precision trả lời: cảnh báo có đáng tin không; recall trả lời: có bỏ sót không.) TrustMesh không đếm bốn ô trong demo, nhưng quorum cho thấy đúng sự đánh đổi: màn 1, cảnh báo lẻ của node-a chưa thành incident, tức giảm FP; màn 3, SIDS path traversal chỉ node-b thấy nên vẫn 1 reporter, nếu Mallory chỉ làm vậy thì đó là FN.">
   <div class="hdr"><div class="kicker">9.6.4 · ĐO CHẤT LƯỢNG PHÁT HIỆN</div><span class="dt"><i>1</i>KHÔNG TRUNG TÂM</span>
     <h2 class="t">Đếm số cảnh báo chưa đủ, <em>phải đo đúng và sai.</em></h2></div>
   <div class="ax a" style="left:330px;top:318px;width:552px;display:flex;justify-content:space-around;--d:.8s"><span>THỰC TẾ: TẤN CÔNG</span><span>BÌNH THƯỜNG</span></div>
@@ -1257,13 +1252,13 @@ code{font:500 .86em var(--mono);color:var(--ac2);background:color-mix(in srgb,va
   <div class="fx" data-step="1" style="top:380px"><small>ACCURACY</small>ACC = (TP+TN) / tất cả</div>
   <div class="fx" data-step="1" style="top:500px"><small>PRECISION</small>PRE = TP / (TP+FP)</div>
   <div class="fx" data-step="2" style="top:620px"><small>RECALL</small>REC = TP / (TP+FN)</div>
-  <div class="tm" style="--d:2s"><span class="lbl">TRONG TRUSTMESH</span><span>Dashboard tính bốn ô từ <code>ground_truth</code> của mỗi event, <b>riêng từng node</b>.</span></div>
-  <aside class="xp" data-step="3"><span class="lbl">CHI TIẾT</span><h3>Đo một IDS</h3><p class="def">Mỗi sự kiện rơi vào một trong bốn ô, tùy nó có thật là tấn công và IDS có báo hay không.</p><ul><li><b>TP</b> bắt đúng · <b>FP</b> báo nhầm · <b>FN</b> bỏ sót · <b>TN</b> yên đúng.</li><li><b>Accuracy</b> = (TP+TN) / tất cả: đúng trên toàn bộ.</li><li><b>Precision</b> = TP / (TP+FP): cảnh báo có đáng tin không.</li><li><b>Recall</b> = TP / (TP+FN): có bỏ sót tấn công không.</li></ul><div class="xe"><span>TRONG TRUSTMESH</span>Dashboard tính 4 ô từ <code>ground_truth</code> của từng event, riêng từng node.</div></aside>
+  <div class="tm" style="--d:2s"><span class="lbl">TRONG TRUSTMESH</span><span>Quorum 2: màn 1, một node nghi ngờ <b>chưa thành incident</b> (bớt FP); màn 3, SIDS chỉ node-b thấy, <b>vẫn 1 reporter</b> (dễ FN).</span></div>
+  <aside class="xp" data-step="3"><span class="lbl">CHI TIẾT</span><h3>Đo một IDS</h3><p class="def">Mỗi sự kiện rơi vào một trong bốn ô, tùy nó có thật là tấn công và IDS có báo hay không.</p><ul><li><b>TP</b> bắt đúng · <b>FP</b> báo nhầm · <b>FN</b> bỏ sót · <b>TN</b> yên đúng.</li><li><b>Accuracy</b> = (TP+TN) / tất cả: đúng trên toàn bộ.</li><li><b>Precision</b> = TP / (TP+FP): cảnh báo có đáng tin không.</li><li><b>Recall</b> = TP / (TP+FN): có bỏ sót tấn công không.</li></ul><div class="xe"><span>TRONG TRUSTMESH</span>Demo không đếm bốn ô. Quorum 2 reporter: cảnh báo lẻ ở màn 1 không thành incident (bớt FP); SIDS chỉ node-b thấy ở màn 3 vẫn 1 reporter (có thể thành FN).</div></aside>
 </section>
 
 <!-- ============ 15b. BASE RATE ============ -->
 <section class="slide" data-sec="mon" data-spk="2" data-time="0:50"
-  data-notes="Ví dụ bằng số. 10.000 request, chỉ 1 là tấn công. IDS bắt đúng 99%, báo nhầm 1%. (Click 1: báo nhầm khoảng 100 lần, báo đúng 1 lần; người trực nhận 101 cảnh báo, chỉ 1 là thật.) (Click 2: accuracy 99% nhưng precision chỉ 1%. Accuracy cao không có nghĩa cảnh báo đáng tin, vì tấn công hiếm.) (Click 3: góc phân tán: quorum loại cảnh báo lẻ nên giảm báo nhầm; nhiều sensor ghép lại nên bớt bỏ sót.)">
+  data-notes="Ví dụ bằng số. 10.000 request, chỉ 1 là tấn công. IDS bắt đúng 99%, báo nhầm 1%. (Click 1: báo nhầm khoảng 100 lần, báo đúng 1 lần; người trực nhận 101 cảnh báo, chỉ 1 là thật.) (Click 2: accuracy 99% nhưng precision chỉ 1%. Accuracy cao không có nghĩa cảnh báo đáng tin, vì tấn công hiếm.) (Click 3: góc phân tán: quorum loại cảnh báo lẻ nên giảm báo nhầm, như màn 1 của demo; nhưng vụ chỉ một node thấy, hoặc dò chậm nằm dưới ngưỡng ở mọi node, vẫn lọt. Bỏ phiếu không bắt thêm được vụ nào; muốn bớt bỏ sót phải cộng dồn bằng chứng giữa các node.)">
   <div class="hdr"><div class="kicker">9.6.4 · BASE RATE</div><span class="dt"><i>1</i>KHÔNG TRUNG TÂM</span>
     <h2 class="t">Accuracy 99% <em>vẫn có thể là IDS tồi.</em></h2></div>
   <div class="br a" style="top:320px;--d:.8s"><b>10.000</b> request, chỉ <b>1</b> là tấn công</div>
@@ -1274,42 +1269,41 @@ code{font:500 .86em var(--mono);color:var(--ac2);background:color-mix(in srgb,va
   <div class="abs" data-step="1" style="left:830px;top:580px;font:500 17px var(--sans);color:#dbe3f3"><span style="color:#ffb46b">■</span> báo nhầm &nbsp; <span style="color:var(--ok)">■</span> tấn công thật (1/101)</div>
   <div class="card met" data-step="2" style="left:110px;border-color:var(--ok)"><small>ACCURACY</small><b style="color:#8ff0b6">≈ 99%</b></div>
   <div class="card met" data-step="2" style="left:450px;border-color:var(--bad)"><small>PRECISION</small><b style="color:#ff8fa3">≈ 1%</b></div>
-  <div class="tm" data-step="3"><span class="lbl">GÓC PHÂN TÁN</span><span>Quorum 2 reporter loại cảnh báo lẻ → <b>giảm báo nhầm</b>. Nhiều sensor ghép góc nhìn → <b>bớt bỏ sót</b>.</span></div>
-  <aside class="xp" data-step="4"><span class="lbl">CHI TIẾT</span><h3>Base-rate fallacy</h3><p class="def">Khi tấn công rất hiếm, một tỉ lệ báo nhầm nhỏ vẫn sinh ra nhiều cảnh báo nhầm hơn hẳn số tấn công thật.</p><ul><li>10.000 request, chỉ 1 là tấn công; IDS bắt 99%, báo nhầm 1%.</li><li>Báo nhầm ≈ 100 lần, báo đúng ≈ 1 lần.</li><li><b>Accuracy ≈ 99%</b> nhưng <b>precision ≈ 1%</b>.</li><li>Người trực bị ngập cảnh báo nhầm rồi bắt đầu bỏ qua cảnh báo.</li></ul><div class="xe"><span>GÓC PHÂN TÁN</span>Quorum 2 reporter giảm báo nhầm; ghép nhiều sensor tăng recall.</div></aside>
+  <div class="tm" data-step="3"><span class="lbl">GÓC PHÂN TÁN</span><span>Quorum 2 reporter loại cảnh báo lẻ → <b>giảm báo nhầm</b> (màn 1: một node nghi ngờ chưa thành incident). Tấn công rải mỏng vẫn lọt → <b>recall không tăng</b>.</span></div>
+  <aside class="xp" data-step="4"><span class="lbl">CHI TIẾT</span><h3>Base-rate fallacy</h3><p class="def">Khi tấn công rất hiếm, một tỉ lệ báo nhầm nhỏ vẫn sinh ra nhiều cảnh báo nhầm hơn hẳn số tấn công thật.</p><ul><li>10.000 request, chỉ 1 là tấn công; IDS bắt 99%, báo nhầm 1%.</li><li>Báo nhầm ≈ 100 lần, báo đúng ≈ 1 lần.</li><li><b>Accuracy ≈ 99%</b> nhưng <b>precision ≈ 1%</b>.</li><li>Người trực bị ngập cảnh báo nhầm rồi bắt đầu bỏ qua cảnh báo.</li></ul><div class="xe"><span>GÓC PHÂN TÁN</span>Quorum 2 reporter giảm báo nhầm nhưng không tăng recall; muốn bắt vụ rải mỏng phải cộng dồn bằng chứng giữa các node.</div></aside>
 </section>
 
 <!-- ============ 16. TRUSTMESH ============ -->
 <section class="slide" data-sec="demo" data-spk="1" data-time="0:40" data-sweep="DEMO · TRUSTMESH"
-  data-notes="Giới thiệu kiến trúc rồi chuyển sang demo trực tiếp theo docs/DEMO_SCRIPT.md. Huynh dẫn ABAC + delegation và CIDS; Hùng dẫn Sybil, Tamper, tắt node B và kết luận.">
+  data-notes="Giới thiệu kiến trúc: mỗi node có fingerprint khóa, audit chain và danh sách incident riêng; node A có nhãn DASHBOARD vì trình duyệt nói chuyện với A, A điều phối node khác bằng HTTP. Rồi chuyển sang demo theo docs/DEMO_SCRIPT.md: bấm R, rồi bấm → qua 4 màn của một câu chuyện, Mallory muốn sửa bảng điểm. Huynh dẫn màn 1–3 (ai được đọc, ủy quyền qua ba node, Mallory đổi chiến thuật); Hùng nhận lời ở cuối màn 3, dẫn màn 4 (xóa dấu vết) rồi tắt node B. Các màn nối nhau: vé ở màn 2 bị đánh cắp ở màn 3, lần bị từ chối ở màn 1 là bản ghi Mallory muốn xóa ở màn 4. Sybil, Byzantine 3k + 1 và firewall chỉ nói trên slide. (Click: chi tiết kiến trúc.)">
   <div class="hdr"><div class="kicker">DEMO</div>
     <h2 class="t">Ba node, không bộ nhớ chung, <em>chỉ nói chuyện qua HTTP.</em></h2></div>
   <svg class="viz" viewBox="0 0 1600 900">
     <path class="flow a-fade" style="--d:1.8s" d="M530 430 L600 430"/><path class="flow a-fade" style="--d:1.9s" d="M980 430 L1050 430"/>
   </svg>
-  <div class="card nd a" style="left:150px;--d:.8s"><b>NODE A<small>:8001</small></b><ul><li>ABAC + capability</li><li>Khóa Ed25519</li><li>Sensor</li><li>Audit chain</li></ul></div>
-  <div class="card nd a" style="left:610px;--d:1s"><b>NODE B<small>:8002</small></b><ul><li>ABAC + capability</li><li>Khóa Ed25519</li><li>Sensor</li><li>Audit chain</li></ul></div>
-  <div class="card nd a" style="left:1070px;--d:1.2s"><b>NODE C<small>:8003</small></b><ul><li>ABAC + capability</li><li>Khóa Ed25519</li><li>Sensor</li><li>Audit chain</li></ul></div>
-  <div class="sig a" style="left:705px;top:282px;--d:2s">⇄ signed alerts</div>
+  <div class="card nd a" style="left:150px;--d:.8s"><b>NODE A<small>:8001</small></b><ul><li><code>crypto</code> · khóa Ed25519</li><li><code>trust</code> · keyring, audit chain</li><li><code>authz</code> · policy, capability</li><li><code>monitor</code> · gateway, SIDS/AIDS</li></ul></div>
+  <div class="card nd a" style="left:610px;--d:1s"><b>NODE B<small>:8002</small></b><ul><li><code>crypto</code> · khóa Ed25519</li><li><code>trust</code> · keyring, audit chain</li><li><code>authz</code> · policy, capability</li><li><code>monitor</code> · gateway, SIDS/AIDS</li></ul></div>
+  <div class="card nd a" style="left:1070px;--d:1.2s"><b>NODE C<small>:8003</small></b><ul><li><code>crypto</code> · khóa Ed25519</li><li><code>trust</code> · keyring, audit chain</li><li><code>authz</code> · policy, capability</li><li><code>monitor</code> · gateway, SIDS/AIDS</li></ul></div>
+  <div class="sig a" style="left:705px;top:282px;--d:2s">⇄ alert + vé ký số</div>
   <div class="steps">
-    <div class="a" style="--d:1.8s"><small>01 · 9.5<i data-sp="2">2</i></small>ABAC + delegation</div>
-    <div class="a" style="--d:1.95s"><small>02 · 9.4.2<i data-sp="1">1</i></small>Sybil</div>
-    <div class="a" style="--d:2.1s"><small>03 · 9.6<i data-sp="2">2</i></small>CIDS</div>
-    <div class="a" style="--d:2.25s"><small>04 · 9.4.3<i data-sp="1">1</i></small>Tamper</div>
-    <div class="a" style="--d:2.4s"><small>05 · FAILURE<i data-sp="1">1</i></small>Tắt node B</div>
-    <div class="a" style="--d:2.55s"><small>06 · 9.7<i data-sp="1">1</i></small>Kết luận</div>
+    <div class="a" style="--d:1.8s"><small>1 · 9.5.1–9.5.2<i data-sp="2">2</i></small>Ai được đọc bảng điểm?</div>
+    <div class="a" style="--d:2s"><small>2 · 9.5.3<i data-sp="2">2</i></small>Ủy quyền đi qua ba node</div>
+    <div class="a" style="--d:2.2s"><small>3 · 9.4 · 9.6<i data-sp="2">2</i></small>Mallory đổi chiến thuật</div>
+    <div class="a" style="--d:2.4s"><small>4 · 9.4.3<i data-sp="1">1</i></small>Xóa dấu vết</div>
+    <div class="a" style="--d:2.6s"><small>FAIL<i data-sp="1">1</i></small>Tắt node B</div>
   </div>
   <div class="go-demo">▶ CHUYỂN SANG DEMO TRỰC TIẾP</div>
-  <aside class="xp" data-step="1"><span class="lbl">CHI TIẾT</span><h3>Kiến trúc demo</h3><p class="def">TrustMesh gồm 3 node FastAPI độc lập chạy bằng Docker Compose (cổng 8001–8003), mỗi node có trạng thái riêng và chỉ giao tiếp qua HTTP.</p><ul><li><b>Authorization</b>: PolicyEngine (RBAC, DAC, ABAC), capability ký Ed25519, delegation.</li><li><b>Trust</b>: khóa Ed25519 riêng, <code>/identity</code>, audit hash chain.</li><li><b>Monitoring</b>: gateway, sensor cửa sổ 30 giây, alert ký số, quorum 2.</li><li><b>Partial failure</b>: tắt 1 node, 2 node còn lại vẫn phục vụ.</li></ul><div class="xe"><span>KỊCH BẢN</span>Chạy theo <code>docs/DEMO_SCRIPT.md</code>, 6 bước, mỗi bước gắn mục sách.</div></aside>
+  <aside class="xp" data-step="1"><span class="lbl">CHI TIẾT</span><h3>Kiến trúc demo</h3><p class="def">TrustMesh gồm 3 node FastAPI độc lập chạy bằng Docker Compose (cổng 8001–8003), mỗi node có trạng thái riêng và chỉ giao tiếp qua HTTP.</p><ul><li><b>Trust</b>: keyring ghim khóa peer (TOFU, trust anchor), audit chain.</li><li><b>Authorization</b>: directory phía server, RBAC/DAC/MAC/ABAC, capability, delegation.</li><li><b>Monitoring</b>: mỗi quyết định truy cập là sự kiện cho sensor; SIDS + AIDS, quorum 2, ghép theo lúc nhận.</li><li><b>Partial failure</b>: tắt node B, bấm R, chạy lại 1 → 4.</li></ul><div class="xe"><span>KỊCH BẢN</span><code>docs/DEMO_SCRIPT.md</code>: R reset, → qua 4 màn, cuối cùng partial failure.</div></aside>
 </section>
 
 <!-- ============ 17. DỰ PHÒNG ============ -->
 <section class="slide" data-sec="demo" data-spk="1" data-time="dự phòng"
-  data-notes="Chỉ dùng khi demo lỗi. Ảnh chụp thật ngày 29/09/2026.">
+  data-notes="Chỉ dùng khi demo lỗi. Ảnh chụp thật ngày 29/09/2026, giao diện dashboard bản cũ; ý partial failure giữ nguyên. Kể kết quả bản mới: bấm R rồi chạy lại 1 → 4. Màn 2: node-b không phản hồi nên Bob ủy quyền qua node-c. Màn 3: incident vẫn đạt quorum nhờ node-a và node-c. Màn 4: node-c vẫn giữ bằng chứng.">
   <div class="hdr"><div class="kicker">DỰ PHÒNG · PARTIAL FAILURE</div>
     <h2 class="t">Tắt node B: <em>2/3 node vẫn phục vụ.</em></h2></div>
   <div class="shot a" style="left:110px;--d:.8s"><img src="../3node/01-3-node-online.png" alt="Dashboard: 3 node online"><p>3/3 node online</p></div>
   <div class="shot a" style="left:820px;--d:1.1s"><img src="../3node/02-node-b-down-van-phuc-vu.png" alt="Dashboard: tắt node B, 2/3 node vẫn phục vụ"><p>Tắt node B → 2/3 vẫn phục vụ</p></div>
-  <aside class="xp" data-step="1"><span class="lbl">CHI TIẾT</span><h3>Bằng chứng chạy thật</h3><p class="def">Hai ảnh chụp từ lần chạy 3 container ngày 29/09/2026, dùng khi demo trực tiếp gặp sự cố.</p><ul><li>Ảnh trái: cả 3 node online, mỗi node có fingerprint khóa riêng.</li><li>Ảnh phải: dừng node B, dashboard báo 2/3 node online, B unreachable.</li><li>Node A và C vẫn kiểm quyền, ghi audit và xác nhận incident.</li><li>Đây là partial failure: một phần hỏng, phần còn lại vẫn chạy.</li></ul><div class="xe"><span>CÁCH TÁI HIỆN</span><code>docker compose stop node-b</code> rồi mở lại <code>http://localhost:8001</code>.</div></aside>
+  <aside class="xp" data-step="1"><span class="lbl">CHI TIẾT</span><h3>Bằng chứng chạy thật</h3><p class="def">Hai ảnh chụp từ lần chạy 3 container ngày 29/09/2026, dùng khi demo trực tiếp gặp sự cố.</p><ul><li>Ảnh trái: cả 3 node online, mỗi node có fingerprint khóa riêng.</li><li>Ảnh phải: dừng node B, dashboard báo 2/3 node online, B unreachable.</li><li>Chạy lại 1 → 4: Bob ủy quyền qua node-c; incident vẫn đủ quorum nhờ A và C; node-c vẫn giữ bằng chứng.</li><li>Đây là partial failure: một phần hỏng, phần còn lại vẫn chạy.</li></ul><div class="xe"><span>CÁCH TÁI HIỆN</span><code>docker compose stop node-b</code>, bấm R, chạy lại 1 → 4; khôi phục bằng <code>docker compose start node-b</code>.</div></aside>
 </section>
 
 <!-- ============ 18. KẾT LUẬN ============ -->
@@ -1320,7 +1314,7 @@ code{font:500 .86em var(--mono);color:var(--ac2);background:color-mix(in srgb,va
   <div class="fin a" style="top:340px;--c:#4da3ff;--d:1.8s"><b>Trust</b>Nêu rõ kỳ vọng, bằng chứng và giới hạn lỗi.</div>
   <div class="fin a" style="top:450px;--c:#3ddc84;--d:2.1s"><b>Authorization</b>Mặc định từ chối, kiểm tra mọi request, không mở rộng quyền khi ủy quyền.</div>
   <div class="fin a" style="top:560px;--c:#ff9a3c;--d:2.4s"><b>Monitoring</b>Nhiều điểm quan sát, đo cả FP lẫn FN.</div>
-  <div class="limit a" style="--d:3s">Giới hạn demo: dữ liệu mô phỏng · không TLS · không thay thế OAuth / IDS production.</div>
+  <div class="limit a" style="--d:3s">Giới hạn demo: dữ liệu mô phỏng · directory cứng trong code · không TLS · không thay thế OAuth / IDS production.</div>
   <div class="qa" data-step="2"><b class="hl">Hỏi đáp</b></div>
   <aside class="xp" data-step="1"><span class="lbl">CHI TIẾT</span><h3>9.7 Tóm tắt</h3><p class="def">Bảo mật hệ phân tán là sự phối hợp nhiều cơ chế; mỗi cơ chế dựa trên giả định mà cơ chế khác kiểm tra.</p><ul><li><b>Trust</b>: ghi rõ kỳ vọng, bằng chứng và giới hạn lỗi (n ≥ 3k + 1, chống Sybil).</li><li><b>Authorization</b>: kiểm mọi request, mặc định từ chối, ủy quyền chỉ thu hẹp.</li><li><b>Monitoring</b>: nhiều điểm quan sát, ký và ghép cảnh báo, đo cả FP và FN.</li><li><b>Giới hạn demo</b>: dữ liệu mô phỏng, không TLS, không thay OAuth hay IDS production.</li></ul><div class="xe"><span>CÂU CHỐT</span>Không cơ chế nào đứng một mình.</div></aside>
 </section>

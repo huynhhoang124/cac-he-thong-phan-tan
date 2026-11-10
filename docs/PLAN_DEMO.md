@@ -1,5 +1,9 @@
 # Plan demo TrustMesh — phủ toàn bộ 9.4 → 9.7
 
+> **Cập nhật 28/10/2026:** 8 kịch bản rời được rút gọn thành một câu chuyện 4 màn "Mallory muốn sửa bảng điểm" (xem `docs/DEMO_SCRIPT.md`). Sybil, Byzantine và Firewall chỉ nói trên slide.
+>
+> **Cập nhật 21/10/2026:** demo đã được viết lại (v2) và đã làm đủ W1–W10. Dashboard có 8 kịch bản ứng với phím 1–8 và phím R để reset. Kịch bản chạy và lời dẫn nằm trong `docs/DEMO_SCRIPT.md`. Các bảng dưới đây giữ lại làm lịch sử phân tích.
+
 Tài liệu này liệt kê **mọi nội dung sách từ 9.4 đến hết chương**, đối chiếu với những gì demo TrustMesh đang có (`demo/`), rồi chốt phần cần làm thêm, kịch bản chạy và câu hỏi khó.
 
 Ký hiệu trạng thái:
