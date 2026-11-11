@@ -56,6 +56,8 @@ input[type=checkbox] { accent-color: var(--accent); width: 16px; height: 16px; }
 .me > span:first-child { font-weight: 600; }
 
 .notice { margin: 16px 24px 0; padding: 10px 14px; border-radius: 6px; font-size: 14px; border: 1px solid; }
+.node-tag { font: 600 12.5px ui-monospace, Consolas, monospace; color: var(--ok); }
+#ticket-panel textarea { width: 100%; box-sizing: border-box; font: 12.5px ui-monospace, Consolas, monospace; margin-bottom: 10px; }
 .notice.ok { color: var(--ok); background: #eaf5ee; border-color: #b8dcc6; }
 .notice.err { color: var(--err); background: #fbeeed; border-color: #ebc1bd; }
 .notice.warn { color: var(--warn); background: #fbf3e2; border-color: #e8d3a6; }

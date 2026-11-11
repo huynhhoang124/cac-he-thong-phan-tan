@@ -2,13 +2,16 @@
 from __future__ import annotations
 
 import asyncio
+import base64
+import json as jsonlib
 import os
+import time
 from urllib.parse import urlparse
 
 import httpx
 
 from .authz import Capabilities
-from .crypto import Identity
+from .crypto import Identity, verify
 from .monitor import Detector, Firewall
 from .trust import AuditChain, Keyring
 
@@ -62,8 +65,8 @@ async def call(node: str, method: str, path: str, json: dict | None = None, **kw
         return None, {"detail": f"{node} không phản hồi ({type(exc).__name__})"}
 
 
-async def call_many(targets: list[str], method: str, path: str, json: dict | None = None) -> dict[str, tuple[int | None, dict]]:
-    results = await asyncio.gather(*(call(n, method, path, json) for n in targets))
+async def call_many(targets: list[str], method: str, path: str, json: dict | None = None, **kw) -> dict[str, tuple[int | None, dict]]:
+    results = await asyncio.gather(*(call(n, method, path, json, **kw) for n in targets))
     return dict(zip(targets, results))
 
 
@@ -91,3 +94,24 @@ async def sense(event: dict) -> list[dict]:
         replies = await call_many(list(PEERS), "POST", "/peer/alert", alert)
         out.append({**p, "peers": {n: ({"down": True} if code is None else data) for n, (code, data) in replies.items()}})
     return out
+
+
+HOP_TTL = 30
+
+
+def hop_header() -> dict:
+    """Header chứng minh request đến từ một node trong cluster (ký bằng khóa node)."""
+    signed = identity.signed({"node": NODE_ID, "t": time.time()})
+    return {"x-hop": base64.urlsafe_b64encode(jsonlib.dumps(signed).encode()).decode()}
+
+
+async def is_peer(value: str) -> bool:
+    # shortcut: chữ ký còn hạn 30 s có thể bị phát lại trong khoảng đó; production dùng mTLS giữa các node.
+    try:
+        signed = jsonlib.loads(base64.urlsafe_b64decode(value.encode()))
+        p = signed["payload"]
+        await ensure_key(str(p["node"]))
+        key = keyring.key_of(str(p["node"]))
+        return bool(key) and verify(key, p, signed["signature"]) and abs(time.time() - float(p["t"])) < HOP_TTL
+    except (ValueError, KeyError, TypeError):
+        return False

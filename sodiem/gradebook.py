@@ -1,7 +1,7 @@
 """Sổ điểm DS: API người dùng.
 
 - Đăng nhập: node kiểm mật khẩu rồi ký phiên (Ed25519). Node nào trong cluster cũng tự kiểm được phiên.
-- Mỗi yêu cầu được chia vòng (round-robin) sang node khác; node chết thì bỏ qua (partial failure).
+- Mỗi node (mỗi cổng) tự xử lý yêu cầu nó nhận, không hỏi node khác; node chết thì dùng cổng node khác.
 - Quyền: directory (ABAC/MAC/...) trước, không được thì thử các quyền được chia sẻ (capability).
 - Mỗi quyết định ghi audit và đưa cho sensor; cảnh báo chỉ thành sự cố khi ≥2 node cùng báo.
 - Điểm và quyền chia sẻ được ký rồi nhân bản sang peer; peer kiểm chữ ký trước khi ghi.
@@ -11,7 +11,6 @@ from __future__ import annotations
 import base64
 import hashlib
 import hmac
-import itertools
 import json
 import os
 import time
@@ -74,36 +73,9 @@ async def session_user(authorization: str) -> str:
 
 # shortcut: sensor gom theo "user@ip" vì khi chạy thử mọi người dùng chung 127.0.0.1; IDS thật gom theo IP/thiết bị.
 def client_ip(request: Request) -> str:
-    # shortcut: tin x-client khi có x-hop (request từ peer); production cần mTLS để chỉ peer gửi được header này.
-    if request.headers.get("x-hop"):
+    if request.state.peer:  # x-hop đã được gateway kiểm chữ ký
         return request.headers.get("x-client", "unknown")
     return request.client.host if request.client else "unknown"
-
-
-# ---------------- chia vòng giữa các node ----------------
-
-_turn = itertools.count()
-
-
-async def route(request: Request, body: dict | None = None) -> dict | None:
-    """Chuyển yêu cầu sang node kế tiếp. None nghĩa là node này tự xử lý."""
-    if request.headers.get("x-hop"):
-        return None
-    order = node.nodes()
-    start = next(_turn) % len(order)
-    headers = {"x-hop": "1", "x-client": client_ip(request),
-               "authorization": request.headers.get("authorization", "")}
-    for n in order[start:] + order[:start]:
-        if n == NODE_ID:
-            return None
-        code, data = await node.call(n, request.method, request.url.path, json=body, headers=headers,
-                                     timeout=node.TIMEOUT * 3)
-        if code is None:
-            continue  # node chết → thử node kế tiếp
-        if code != 200:
-            raise HTTPException(code, data.get("detail", f"{n} trả {code}"))
-        return data
-    return None
 
 
 # ---------------- quyết định truy cập ----------------
@@ -119,9 +91,14 @@ def granted(user: str, action: str) -> tuple[bool, str]:
     return False, ""
 
 
-async def decide(user: str, action: str, ip: str, path: str = "/grades-ds") -> dict:
-    d = evaluate(user, RESOURCE, action)
-    if not d.allowed:
+async def decide(user: str, action: str, ip: str, path: str = "/grades-ds", ticket: dict | None = None) -> dict:
+    """ticket: vé người dùng tự trình (dán vào), chỉ xét vé đó; không có thì xét directory rồi vé đã lưu."""
+    if ticket is not None:
+        await node.ensure_key(str((ticket.get("payload") or {}).get("node", "")))
+        d = caps.check(ticket, user, RESOURCE, action)
+    else:
+        d = evaluate(user, RESOURCE, action)
+    if not d.allowed and ticket is None:
         for cap in book["tickets"]:
             if cap["payload"]["subject"] != user:
                 continue
@@ -170,8 +147,6 @@ def profile(user: str) -> dict:
 
 @router.post("/app/login")
 async def login(req: Login, request: Request):
-    if (fwd := await route(request, req.model_dump())) is not None:
-        return fwd
     expected = _PASSWORDS.get(req.user)
     given = hashlib.pbkdf2_hmac("sha256", req.password.encode(), _SALT, 100_000)
     ok = expected is not None and hmac.compare_digest(expected, given)
@@ -185,15 +160,11 @@ async def login(req: Login, request: Request):
 
 @router.get("/app/me")
 async def me(request: Request, authorization: str = Header("")):
-    if (fwd := await route(request)) is not None:
-        return fwd
     return profile(await session_user(authorization))
 
 
 @router.get("/app/grades")
 async def grades(request: Request, authorization: str = Header("")):
-    if (fwd := await route(request)) is not None:
-        return fwd
     user = await session_user(authorization)
     d = await decide(user, "read", client_ip(request))
     if not d["allowed"]:
@@ -201,10 +172,22 @@ async def grades(request: Request, authorization: str = Header("")):
     return {"grades": book["grades"], "version": book["version"], "node": NODE_ID, "via": d["model"]}
 
 
+class Presented(BaseModel):
+    ticket: dict
+
+
+@router.post("/app/grades/ticket")
+async def grades_by_ticket(req: Presented, request: Request, authorization: str = Header("")):
+    """Mở bảng điểm bằng vé tự trình. Node kiểm khóa ký, chữ ký, hạn, người nhận, resource, action."""
+    user = await session_user(authorization)
+    d = await decide(user, "read", client_ip(request), "/grades-ds/ticket", ticket=req.ticket)
+    if not d["allowed"]:
+        raise denied(d)
+    return {"grades": book["grades"], "version": book["version"], "node": NODE_ID, "via": d["model"]}
+
+
 @router.put("/app/grades/{student}")
 async def set_grade(student: str, req: Score, request: Request, authorization: str = Header("")):
-    if (fwd := await route(request, req.model_dump())) is not None:
-        return fwd
     user = await session_user(authorization)
     if student not in book["grades"]:
         raise HTTPException(404, "Không có sinh viên này trong sổ")
@@ -223,19 +206,15 @@ async def set_grade(student: str, req: Score, request: Request, authorization: s
 
 @router.get("/app/shares")
 async def shares(request: Request, authorization: str = Header("")):
-    if (fwd := await route(request)) is not None:
-        return fwd
     user = await session_user(authorization)
     live = [c for c in book["tickets"] if caps.check(c).allowed]
     view = lambda c: {k: c["payload"][k] for k in ("issuer", "subject", "actions", "expires", "may_delegate", "depth", "node")}
-    return {"received": [view(c) for c in live if c["payload"]["subject"] == user],
+    return {"received": [{**view(c), "ticket": c} for c in live if c["payload"]["subject"] == user],
             "given": [view(c) for c in live if c["payload"]["issuer"] == user], "node": NODE_ID}
 
 
 @router.post("/app/shares")
 async def share(req: Share, request: Request, authorization: str = Header("")):
-    if (fwd := await route(request, req.model_dump())) is not None:
-        return fwd
     user = await session_user(authorization)
     if req.to not in PROFILES or req.to == user:
         raise HTTPException(400, "Người nhận không hợp lệ")
@@ -258,12 +237,10 @@ async def share(req: Share, request: Request, authorization: str = Header("")):
 
 @router.get("/app/admin")
 async def admin(request: Request, authorization: str = Header("")):
-    if (fwd := await route(request)) is not None:
-        return fwd
     user = await session_user(authorization)
     if SUBJECTS[user]["role"] != "admin":
         raise HTTPException(403, "Chỉ quản trị hệ thống xem được trang này")
-    results = await node.call_many(node.nodes(), "GET", "/status")
+    results = await node.call_many(node.nodes(), "GET", "/status", headers=node.hop_header())
     return {"node": NODE_ID, "nodes": [{"reachable": True, **data} if code == 200 else {"node_id": n, "reachable": False}
                                        for n, (code, data) in results.items()]}
 
@@ -282,7 +259,7 @@ async def drill_tamper(req: Drill, authorization: str = Header("")):
         if req.node not in PEERS:
             raise HTTPException(404, f"không có node {req.node}")
         code, data = await node.call(req.node, "POST", "/app/admin/tamper", json=req.model_dump(),
-                                     headers={"authorization": authorization, "x-hop": "1"})
+                                     headers={"authorization": authorization, **node.hop_header()})
         if code is None:
             raise HTTPException(503, f"{req.node} không phản hồi")
         if code != 200:
@@ -308,9 +285,12 @@ async def peer_grade(signed: dict):
     if key is None or not verify(key, p, str(signed.get("signature", ""))) or p.get("student") not in book["grades"]:
         audit.append("grade_rejected", {"claimed_node": origin, "student": p.get("student")})
         raise HTTPException(400, f"bản cập nhật không có chữ ký hợp lệ của node trong cluster ({origin})")
-    # shortcut: ghi đồng thời ở 2 node thì bản đến sau thắng; cần vector clock nếu muốn gộp đúng.
+    if int(p["version"]) < book["version"]:  # bản cũ hoặc bị phát lại: không cho lùi điểm
+        audit.append("grade_stale", {"student": p["student"], "version": p["version"], "from": origin})
+        return {"node_id": NODE_ID, "version": book["version"], "ignored": True}
+    # shortcut: ghi đồng thời cùng version ở 2 node thì bản đến sau thắng; cần vector clock nếu muốn gộp đúng.
     book["grades"][p["student"]] = p["score"]
-    book["version"] = max(book["version"], int(p["version"]))
+    book["version"] = int(p["version"])
     audit.append("grade_replicated", {"student": p["student"], "score": p["score"], "from": origin})
     return {"node_id": NODE_ID, "version": book["version"]}
 
@@ -325,3 +305,25 @@ async def peer_ticket(cap: dict):
     if cap not in book["tickets"]:
         book["tickets"].append(cap)
     return {"node_id": NODE_ID}
+
+
+@router.get("/peer/state")
+async def peer_state():
+    """Chỉ peer gọi được (gateway kiểm x-hop): node vừa khởi động lại dùng để bắt kịp."""
+    return {"grades": book["grades"], "version": book["version"], "tickets": book["tickets"]}
+
+
+async def sync_from_peers() -> None:
+    results = await node.call_many(list(PEERS), "GET", "/peer/state", headers=node.hop_header())
+    states = [d for c, d in results.values() if c == 200]
+    best = max(states, key=lambda d: d["version"], default=None)
+    if best and best["version"] > book["version"]:
+        book["grades"].update({k: v for k, v in best["grades"].items() if k in book["grades"]})
+        book["version"] = best["version"]
+    for st in states:
+        for cap in st["tickets"]:
+            await node.ensure_key(str(cap["payload"]["node"]))
+            if cap not in book["tickets"] and caps.check(cap).allowed:  # chỉ nhận vé có chữ ký hợp lệ
+                book["tickets"].append(cap)
+    if states:
+        audit.append("rejoined", {"version": book["version"], "tickets": len(book["tickets"])})

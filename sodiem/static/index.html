@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sổ điểm DS</title>
   <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/static/styles.css?v=10">
+  <link rel="stylesheet" href="/static/styles.css?v=11">
 </head>
 <body>
   <!-- Đăng nhập -->
   <main class="login" id="login-view" hidden>
     <form class="login-card" id="login-form">
       <h1>Sổ điểm DS</h1>
-      <p class="muted">Quản lý điểm môn Hệ phân tán</p>
+      <p class="muted">Quản lý điểm môn Hệ phân tán · <b class="node-tag" id="lg-node"></b></p>
       <label>Tên đăng nhập <input id="lg-user" autocomplete="username" required></label>
       <label>Mật khẩu <input id="lg-pass" type="password" autocomplete="current-password" required></label>
       <p class="error" id="lg-error" hidden></p>
@@ -39,7 +39,7 @@
           <button data-tab="admin" id="tab-admin" hidden>Quản trị hệ thống</button>
         </nav>
       </div>
-      <div class="me"><span id="me-name"></span><span class="muted" id="me-title"></span>
+      <div class="me"><b class="node-tag" id="me-node"></b><span id="me-name"></span><span class="muted" id="me-title"></span>
         <button class="ghost" id="logout">Đăng xuất</button></div>
     </header>
 
@@ -84,6 +84,12 @@
           <h2 class="sub">Bạn đã chia sẻ</h2>
           <ul class="shares" id="given"></ul>
         </article>
+        <article class="panel" id="ticket-panel" hidden>
+          <h2>Mở bảng điểm bằng vé</h2>
+          <p class="meta">Dán vé được chia sẻ (JSON). Node tự kiểm khóa ký, chữ ký, hạn và người nhận.</p>
+          <textarea id="tk-text" rows="9" spellcheck="false" aria-label="Vé JSON"></textarea>
+          <button class="primary" id="tk-use">Dùng vé</button>
+        </article>
       </div>
     </section>
 
@@ -102,6 +108,6 @@
   </div>
 
   <footer>Sổ điểm DS chạy trên 3 node TrustMesh · bản học thuật, không TLS</footer>
-  <script src="/static/app.js?v=10" defer></script>
+  <script src="/static/app.js?v=13" defer></script>
 </body>
 </html>

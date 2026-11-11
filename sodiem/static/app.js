@@ -58,6 +58,7 @@ async function onLogin(ev) {
 function logout() {
   try { sessionStorage.removeItem("sodiem-token"); } catch { /* bỏ qua */ }
   me = null;
+  $("tk-text").value = "";
   clearInterval(adminTimer);
   $("notice").hidden = true;
   $("app-view").hidden = true;
@@ -127,6 +128,15 @@ async function loadShares() {
         const li = el("li");
         li.append(el("b", "", `${who(s)} · ${s.actions.map((a) => ACT[a]).join(", ")}`),
           el("span", "", `đến ${time(s.expires)}` + (s.may_delegate ? " · được chia sẻ tiếp" : "") + (s.depth ? ` · cấp ${s.depth + 1}` : "") + ` · ký bởi ${s.node}`));
+        if (s.ticket) {
+          const copy = el("button", "ghost", "Sao chép vé");
+          copy.addEventListener("click", async () => {
+            const text = JSON.stringify(s.ticket, null, 2);
+            try { await navigator.clipboard.writeText(text); notice("Đã sao chép vé vào clipboard."); }
+            catch { $("tk-text").value = text; notice("Không truy cập được clipboard; vé đã đặt vào ô Dùng vé.", "warn"); }
+          });
+          li.append(copy);
+        }
         ul.append(li);
       }
     };
@@ -146,6 +156,19 @@ async function onShare(ev) {
     const out = await api("/app/shares", "POST", { to, actions, minutes: Number($("sh-min").value), may_delegate: $("sh-deleg").checked });
     notice(`Đã chia sẻ quyền ${actions.map((a) => ACT[a]).join(", ")} cho ${PEOPLE[to]}. Ký bởi ${out.node}.`);
     loadShares();
+  } catch (e) {
+    notice(e.message, "err");
+  }
+}
+
+async function useTicket() {
+  let ticket;
+  try { ticket = JSON.parse($("tk-text").value); } catch { return notice("Vé không phải JSON hợp lệ.", "err"); }
+  try {
+    const out = await api("/app/grades/ticket", "POST", { ticket });
+    $("book-meta").textContent = `Phiên bản ${out.version} · xử lý bởi ${out.node} · bằng vé vừa dán`;
+    $("grades").replaceChildren(...Object.entries(out.grades).map(([student, score]) => row(student, score)));
+    notice(`Vé hợp lệ, ${out.node} cho xem bảng điểm.`);
   } catch (e) {
     notice(e.message, "err");
   }
@@ -183,7 +206,7 @@ function nodeCard(n) {
   head.append(el("h3", "", n.node_id), el("span", n.reachable ? "state ok" : "state off", n.reachable ? "hoạt động" : "không phản hồi"));
   card.append(head);
   if (!n.reachable) {
-    card.append(el("p", "meta", "Các node còn lại vẫn phục vụ. Yêu cầu tới node này được chuyển sang node kế tiếp."));
+    card.append(el("p", "meta", "Các node còn lại vẫn phục vụ ở cổng của chúng; người dùng chuyển sang cổng khác."));
     return card;
   }
   const a = n.audit;
@@ -238,6 +261,8 @@ function start(profile, home = true) {
   $("tab-admin").hidden = !profile.admin;
   $("share-form").hidden = !profile.can_share;
   $("share-off").hidden = profile.can_share;
+  $("ticket-panel").hidden = profile.can_read;
+  $("me-node").textContent = profile.node;
   $("sh-to").replaceChildren(...Object.keys(PEOPLE).filter((u) => u !== profile.user && u !== "root").map((u) => new Option(PEOPLE[u], u)));
   if (home) tab(profile.admin ? "admin" : "book");
   loadGrades();
@@ -259,6 +284,11 @@ document.querySelectorAll("#quick button").forEach((b) => b.addEventListener("cl
 $("logout").addEventListener("click", logout);
 $("load").addEventListener("click", () => refreshMe(false));
 $("share-form").addEventListener("submit", onShare);
+$("tk-use").addEventListener("click", useTicket);
+fetch("/health").then((r) => r.json()).then((h) => {
+  $("lg-node").textContent = `${h.node_id} · cổng ${location.port}`;
+  document.title = `Sổ điểm DS · ${h.node_id}`;
+}).catch(() => {});
 document.querySelectorAll("#tabs button").forEach((b) => b.addEventListener("click", () => tab(b.dataset.tab)));
 
 if (token()) {

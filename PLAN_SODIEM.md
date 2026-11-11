@@ -6,7 +6,7 @@ Mục tiêu: phần mềm quản lý điểm thật (không phải màn trình d
 
 - [x] Lõi TrustMesh tách riêng (bản sao `crypto`, `trust`, `authz`, `monitor`, `node`); `sense()` chuyển vào `node.py`.
 - [x] `main.py`: chỉ gateway, `/health`, `/identity`, `/status`, `/peer/alert`. Bỏ các API cho client tự khai danh tính (`/access/check`, `/capabilities/*`, `/audit/tamper`, reset).
-- [x] `gradebook.py`: đăng nhập (pbkdf2) → phiên ký Ed25519, node nào cũng kiểm được; chia vòng yêu cầu giữa 3 node, bỏ qua node chết; quyết định = directory rồi quyền được chia sẻ; audit + sensor (`user@ip`); điểm và quyền chia sẻ ký rồi nhân bản; trang quản trị và diễn tập sửa nhật ký chỉ cho admin.
+- [x] `gradebook.py`: đăng nhập (pbkdf2) → phiên ký Ed25519, node nào cũng kiểm được; mỗi cổng một node tự xử lý (không chia vòng, để vai trò từng node đúng lý thuyết); thêm `/app/grades/ticket` dùng vé tự trình; quyết định = directory rồi quyền được chia sẻ; audit + sensor (`user@ip`); điểm và quyền chia sẻ ký rồi nhân bản; trang quản trị và diễn tập sửa nhật ký chỉ cho admin.
 - [x] `tests/test_sodiem.py`: sai mật khẩu, giảng viên đọc/ghi, MAC chặn khách, phiên giả bị 401, chuỗi chia sẻ thu hẹp (delete bị chặn), AIDS, chữ ký nhân bản, admin + diễn tập.
 
 ## Frontend `sodiem/static/`

@@ -78,3 +78,42 @@ def test_admin_only_and_tamper_drill_breaks_chain():
     assert client.get("/app/admin", headers=root).json()["nodes"][0]["audit"]["valid"]
     r = client.post("/app/admin/tamper", headers=root, json={"node": identity.node_id})
     assert r.json()["verification"]["valid"] is False
+
+
+def test_forged_hop_header_rejected_and_status_private():
+    r = client.post("/app/login", json={"user": "mallory", "password": "x"}, headers={"x-hop": "1", "x-client": "1.2.3.4"})
+    assert r.status_code == 401
+    assert client.get("/status").status_code == 403
+    assert client.get("/peer/state").status_code == 403
+    from sodiem.node import hop_header
+    assert client.get("/status", headers=hop_header()).status_code == 200
+
+
+def test_replayed_old_update_cannot_roll_back():
+    new = identity.signed({"student": "bob", "score": 9.0, "version": 2, "by": "alice", "node": identity.node_id})
+    old = identity.signed({"student": "bob", "score": 1.0, "version": 1, "by": "alice", "node": identity.node_id})
+    client.post("/peer/grade", json=new)
+    assert client.post("/peer/grade", json=old).json()["ignored"] is True
+    assert gradebook.book["grades"]["bob"] == 9.0
+
+
+def test_cau4_modified_ticket_signature_mismatch():
+    from sodiem.node import caps
+    cap = caps.issue("alice", "carol", "grades-ds", ["read"], 600)
+    stolen = {**cap, "payload": {**cap["payload"], "subject": "mallory", "actions": ["read", "write"]}}
+    r = client.post("/peer/ticket", json=stolen)
+    assert r.status_code == 400 and "chữ ký không khớp" in r.json()["detail"]
+
+
+def test_cau4_presented_tickets_three_checks():
+    a, c, m = login("alice"), login("carol"), login("mallory")
+    client.post("/app/shares", headers=a, json={"to": "carol", "actions": ["read"]})
+    cap = client.get("/app/shares", headers=c).json()["received"][0]["ticket"]
+    assert client.post("/app/grades/ticket", headers=c, json={"ticket": cap}).status_code == 200
+    stolen = client.post("/app/grades/ticket", headers=m, json={"ticket": cap})
+    assert stolen.status_code == 403 and "không phải mallory" in stolen.json()["detail"]
+    edited = {**cap, "payload": {**cap["payload"], "subject": "mallory"}}
+    assert "chữ ký không khớp" in client.post("/app/grades/ticket", headers=m, json={"ticket": edited}).json()["detail"]
+    forged = {**edited, "payload": {**edited["payload"], "node": "mallory-laptop"}}
+    assert "không thuộc cluster" in client.post("/app/grades/ticket", headers=m, json={"ticket": forged}).json()["detail"]
+    assert any(x["kind"] == "AIDS" and x["source"].startswith("mallory@") for x in detector.alerts)

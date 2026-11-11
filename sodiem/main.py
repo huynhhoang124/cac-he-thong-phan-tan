@@ -27,7 +27,13 @@ node.bind(app)
 @app.middleware("http")
 async def gateway(request: Request, call_next):
     path = request.url.path
-    if path != "/" and not path.startswith(UNFILTERED) and not request.headers.get("x-hop"):
+    hop = request.headers.get("x-hop")
+    request.state.peer = bool(hop) and await node.is_peer(hop)
+    if hop and not request.state.peer:
+        return JSONResponse({"detail": "x-hop không có chữ ký hợp lệ của node trong cluster"}, status_code=401)
+    if path.startswith(("/status", "/peer/state")) and not request.state.peer:
+        return JSONResponse({"detail": "Chỉ node trong cluster được đọc"}, status_code=403)
+    if path != "/" and not path.startswith(UNFILTERED) and not request.state.peer:
         source = request.client.host if request.client else "unknown"
         blocked = firewall.admit(source, int(request.headers.get("content-length") or 0))
         if blocked:
@@ -54,7 +60,6 @@ async def get_identity():
     return {"node_id": NODE_ID, "public_key": identity.public_key, "fingerprint": identity.fingerprint}
 
 
-# shortcut: /status không xác thực để peer gọi nhau; production cần mTLS giữa các node.
 @app.get("/status")
 async def status():
     return {
@@ -87,3 +92,9 @@ async def peer_alert(signed: dict):
 
 
 app.include_router(gradebook.router)
+
+
+@app.on_event("startup")
+async def rejoin():
+    # Node khởi động lại không giữ điểm (RAM): kéo trạng thái mới nhất từ peer trước khi phục vụ.
+    await gradebook.sync_from_peers()
