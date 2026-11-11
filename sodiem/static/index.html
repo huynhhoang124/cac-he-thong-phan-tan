@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sổ điểm DS</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/styles.css?v=10">
+</head>
+<body>
+  <!-- Đăng nhập -->
+  <main class="login" id="login-view" hidden>
+    <form class="login-card" id="login-form">
+      <h1>Sổ điểm DS</h1>
+      <p class="muted">Quản lý điểm môn Hệ phân tán</p>
+      <label>Tên đăng nhập <input id="lg-user" autocomplete="username" required></label>
+      <label>Mật khẩu <input id="lg-pass" type="password" autocomplete="current-password" required></label>
+      <p class="error" id="lg-error" hidden></p>
+      <button class="primary" type="submit">Đăng nhập</button>
+      <div class="accounts">
+        <p>Đăng nhập nhanh bằng tài khoản thử nghiệm (mật khẩu: tên + 123)</p>
+        <div class="quick" id="quick">
+          <button type="button" data-user="alice"><b>alice</b><span>Giảng viên môn DS</span></button>
+          <button type="button" data-user="bob"><b>bob</b><span>Sinh viên, trợ giảng</span></button>
+          <button type="button" data-user="carol"><b>carol</b><span>Sinh viên</span></button>
+          <button type="button" data-user="mallory"><b>mallory</b><span>Khách</span></button>
+          <button type="button" data-user="root"><b>root</b><span>Quản trị hệ thống</span></button>
+        </div>
+      </div>
+    </form>
+  </main>
+
+  <!-- Ứng dụng -->
+  <div id="app-view" hidden>
+    <header class="bar">
+      <div class="brand"><b>Sổ điểm DS</b>
+        <nav class="tabs" id="tabs">
+          <button data-tab="book" class="on">Bảng điểm</button>
+          <button data-tab="admin" id="tab-admin" hidden>Quản trị hệ thống</button>
+        </nav>
+      </div>
+      <div class="me"><span id="me-name"></span><span class="muted" id="me-title"></span>
+        <button class="ghost" id="logout">Đăng xuất</button></div>
+    </header>
+
+    <p class="notice" id="notice" hidden></p>
+
+    <section class="page" id="page-book">
+      <div class="col">
+        <article class="panel">
+          <div class="panel-head">
+            <h2>Bảng điểm môn DS</h2>
+            <button class="ghost" id="load">Tải lại</button>
+          </div>
+          <p class="meta" id="book-meta"></p>
+          <table class="grades">
+            <thead><tr><th>Sinh viên</th><th>Điểm</th><th></th></tr></thead>
+            <tbody id="grades"></tbody>
+          </table>
+        </article>
+      </div>
+      <div class="col">
+        <article class="panel" id="share-panel">
+          <h2>Chia sẻ quyền</h2>
+          <p class="meta">Người nhận chỉ có tối đa quyền bạn đang có, trong thời hạn bạn chọn.</p>
+          <form class="share" id="share-form">
+            <label>Người nhận <select id="sh-to"></select></label>
+            <fieldset><legend>Quyền</legend>
+              <label><input type="checkbox" value="read" checked> Xem</label>
+              <label><input type="checkbox" value="write"> Sửa</label>
+              <label><input type="checkbox" value="delete"> Xóa</label>
+            </fieldset>
+            <label>Thời hạn <select id="sh-min">
+              <option value="15">15 phút</option><option value="60" selected>1 giờ</option><option value="1440">1 ngày</option>
+            </select></label>
+            <label class="check"><input type="checkbox" id="sh-deleg"> Cho phép chia sẻ tiếp</label>
+            <button class="primary" type="submit">Chia sẻ</button>
+          </form>
+          <p class="meta" id="share-off" hidden>Bạn chưa có quyền nào có thể chia sẻ.</p>
+        </article>
+        <article class="panel">
+          <h2>Quyền được chia sẻ cho bạn</h2>
+          <ul class="shares" id="received"></ul>
+          <h2 class="sub">Bạn đã chia sẻ</h2>
+          <ul class="shares" id="given"></ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="page" id="page-admin" hidden>
+      <div class="panel-head wide">
+        <h2>Các node trong cluster</h2>
+        <span class="meta" id="admin-meta"></span>
+      </div>
+      <div class="nodes" id="nodes"></div>
+      <article class="panel">
+        <h2>Sự cố đã xác nhận</h2>
+        <p class="meta">Một node nghi ngờ chưa đủ. Sự cố chỉ được ghi khi ít nhất 2 node độc lập cùng báo một nguồn.</p>
+        <ul class="incidents" id="incidents"></ul>
+      </article>
+    </section>
+  </div>
+
+  <footer>Sổ điểm DS chạy trên 3 node TrustMesh · bản học thuật, không TLS</footer>
+  <script src="/static/app.js?v=10" defer></script>
+</body>
+</html>
